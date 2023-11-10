@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecrime/client/view/authentication/forget_pass/forget_pass.dart';
-import 'package:ecrime/client/view/authentication/sign2.dart';
+import 'package:ecrime/client/view/authentication/sign_up/signup_client.dart';
 import 'package:ecrime/client/widgets/generic_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,8 +32,8 @@ class _LoginPageClientState extends State<LoginPageClient> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-
       User? user = userCredential.user;
+      print("$user aaa");
 
       if (user != null) {
         // Check if the user is an admin or a normal user in Firestore
@@ -93,36 +93,39 @@ class _LoginPageClientState extends State<LoginPageClient> {
         title: const Text('Login'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(),
-
-            const Text(
-              'User Login',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'User Login',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                _buildEmailField(),
+                const SizedBox(height: 15),
+                _buildPasswordField(),
+                const SizedBox(height: 15),
+                _buildForgetButton(context),
+                const SizedBox(height: 15),
+                _buildLoginButton(),
+                const SizedBox(height: 10),
+                //yeh nichay wala daikh layna agar zaroorat hay nahi to is ko aisay karna kay
+                if (_errorMessage.isNotEmpty)
+                  Text(
+                    _errorMessage,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                const SizedBox(height: 10),
+                _buildSignUpButton(context),
+                const SizedBox(height: 10),
+              ],
             ),
-            const SizedBox(height: 20),
-            _buildEmailField(),
-            const SizedBox(height: 15),
-            _buildPasswordField(),
-            const SizedBox(height: 15),
-            _buildForgetButton(context),
-            const SizedBox(height: 15),
-            _buildLoginButton(),
-            const SizedBox(height: 10),
-            //yeh nichay wala daikh layna agar zaroorat hay nahi to is ko aisay karna kay
-            if (_errorMessage.isNotEmpty)
-              Text(
-                _errorMessage,
-                style: const TextStyle(color: Colors.red),
-              ),
-            const SizedBox(height: 10),
-            const Spacer(),
-            _buildSignUpButton(context),
-          ],
+          ),
         ),
       ),
     );
