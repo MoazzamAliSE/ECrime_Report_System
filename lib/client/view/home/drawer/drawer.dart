@@ -1,4 +1,7 @@
 import 'package:ecrime/client/View/widgets/widgets_barrel.dart';
+import 'package:ecrime/client/view/home/drawer/edit_profile/edit_profile.dart';
+import 'package:ecrime/client/view/home/drawer/helpLine_contacts/helpLine_contacts.dart';
+import 'package:ecrime/client/view/home/drawer/suggestion_page/suggestion_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});

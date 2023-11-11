@@ -1,3 +1,4 @@
+import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 
 class HomeScreenClient extends StatelessWidget {
@@ -11,58 +12,44 @@ class HomeScreenClient extends StatelessWidget {
         child: Scaffold(
           drawer: const MyDrawer(),
           appBar: _buildAppBar(),
-          backgroundColor: AppColor.primaryColor,
-          body: Column(
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              Expanded(
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: foregrounBoxDecoration,
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 36.0, left: 10, right: 10),
-                      child: Column(
-                        children: [
-                          _buildHeadingText(),
-                          const SizedBox(
-                            height: 66,
-                          ),
-                          _buildUpperButtons(context),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          _buildSubHeadingText(),
-                          Divider(
-                            thickness: 2,
-                            color: AppColor.primaryColor,
-                          ),
-                          SizedBox(
-                            height: 150,
-                            child: ImageCarouselSlider(),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Divider(
-                            thickness: 2,
-                            color: AppColor.primaryColor,
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          _buildLowerButtons(context),
-                        ],
-                      ),
+          body: BackgroundFrame(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 36.0, left: 10, right: 10),
+                child: Column(
+                  children: [
+                    _buildHeadingText(),
+                    const SizedBox(
+                      height: 66,
                     ),
-                  ),
+                    _buildUpperButtons(context),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    _buildSubHeadingText(),
+                    Divider(
+                      thickness: 2,
+                      color: AppColor.primaryColor,
+                    ),
+                    SizedBox(
+                      height: 150,
+                      child: ImageCarouselSlider(),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Divider(
+                      thickness: 2,
+                      color: AppColor.primaryColor,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    _buildLowerButtons(context),
+                  ],
                 ),
-              )
-            ],
+              ),
+            ),
           ),
         ),
       ),
@@ -213,6 +200,11 @@ class HomeScreenClient extends StatelessWidget {
           svgIcon: regFir,
           text: "Reg. FIR",
           onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RegisterFIR(),
+                ));
             print("abc");
           },
         ),

@@ -1,19 +1,14 @@
-// ignore_for_file: use_build_context_synchronously
+import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
+ 
 
-import 'package:ecrime/client/view/authentication/sign_up/complete_registration_client.dart';
-import 'package:ecrime/client/widgets/generic_text_form_field.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class SignUpPageClient extends StatefulWidget {
+  const SignUpPageClient({Key? key}) : super(key: key);
 
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _SignUpPageClientState createState() => _SignUpPageClientState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpPageClientState extends State<SignUpPageClient> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -111,6 +106,13 @@ class _SignUpPageState extends State<SignUpPage> {
                   _buildConfirmPasswordField(),
                   const SizedBox(height: 40),
                   _completeRegistrationButton(),
+                  const SizedBox(height: 15),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Go back to the login page
+                    },
+                    child: const Text('Go to Login'),
+                  ),
                 ],
               ),
             ),
@@ -210,22 +212,6 @@ class _SignUpPageState extends State<SignUpPage> {
         }
         return null;
       },
-    );
-  }
-}
-
-class FirUserHomePage extends StatelessWidget {
-  const FirUserHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('FirUser Home'),
-      ),
-      body: const Center(
-        child: Text('Welcome to FirUser Home!'),
-      ),
     );
   }
 }

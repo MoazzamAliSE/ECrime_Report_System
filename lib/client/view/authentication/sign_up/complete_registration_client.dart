@@ -1,11 +1,4 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecrime/client/view/authentication/sign_up/signup_client.dart';
-import 'package:ecrime/client/widgets/generic_text_form_field.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 
 class CompleteRegistrationPage extends StatefulWidget {
   final String userId;
@@ -134,10 +127,10 @@ class _CompleteRegistrationPageState extends State<CompleteRegistrationPage> {
         _showDialog('Success', 'Registration completed successfully!');
         Navigator.pop(context);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const FirUserHomePage()),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const FirUserHomePage()),
+        // );
       },
       child: const Text('Sign Up'),
     );
@@ -146,6 +139,7 @@ class _CompleteRegistrationPageState extends State<CompleteRegistrationPage> {
   GenericTextField _buildPhoneNumberField() {
     return GenericTextField(
       controller: _phoneNumberController,
+      keyboardType: TextInputType.number,
       labelText: 'Phone number',
       hintText: 'Enter your Phone number',
       prefixIcon: const Icon(Icons.numbers),

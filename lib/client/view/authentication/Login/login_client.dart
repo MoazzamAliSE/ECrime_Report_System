@@ -1,11 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecrime/client/view/authentication/forget_pass/forget_pass.dart';
-import 'package:ecrime/client/view/authentication/sign_up/signup_client.dart';
-import 'package:ecrime/client/widgets/generic_text_form_field.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 
 class LoginPageClient extends StatefulWidget {
   const LoginPageClient({Key? key}) : super(key: key);
@@ -53,7 +46,7 @@ class _LoginPageClientState extends State<LoginPageClient> {
                 return AlertDialog(
                   title: const Text('Permission Denied'),
                   content: const Text(
-                      'You dont have the permission to enter the home page'),
+                      'You dont have the permission to access the client side'),
                   actions: [
                     TextButton(
                       onPressed: () {
@@ -67,10 +60,10 @@ class _LoginPageClientState extends State<LoginPageClient> {
             );
           } else {
             // User is a normal user, navigate to FirUser home screen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const FirUserHomePage()),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => FirUserHomePage()),
+            // );
           }
         }
       }
@@ -114,7 +107,7 @@ class _LoginPageClientState extends State<LoginPageClient> {
                 const SizedBox(height: 15),
                 _buildLoginButton(),
                 const SizedBox(height: 10),
-                //yeh nichay wala daikh layna agar zaroorat hay nahi to is ko aisay karna kay
+                //yeh daikh layna
                 if (_errorMessage.isNotEmpty)
                   Text(
                     _errorMessage,
@@ -140,7 +133,7 @@ class _LoginPageClientState extends State<LoginPageClient> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SignUpPage()),
+              MaterialPageRoute(builder: (context) => const SignUpPageClient()),
             );
           },
           child: const Text('Sign Up'),
