@@ -1,11 +1,10 @@
-import 'package:ecrime/client/view/complain_corruption/complain_corruption.dart';
-import 'package:ecrime/client/view/investigation_update/investigation_update.dart';
+import 'package:ecrime/client/res/routes/app_routes.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
-
+import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform
   );
   runApp(const MyClientApp());
 }
@@ -15,7 +14,9 @@ class MyClientApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      getPages: AppRoutes.pages(),
       theme: ThemeData(
         useMaterial3: true,
         appBarTheme: AppBarTheme(
@@ -23,7 +24,6 @@ class MyClientApp extends StatelessWidget {
         ),
       ),
       title: 'E-Crime Report System',
-      home: const LoginPageClient(),
     );
   }
 }

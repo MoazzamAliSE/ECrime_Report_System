@@ -41,10 +41,12 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCOccw_jpjAuisetCS_wrzFCjbd0EwfZNk',
-    appId: '1:71106830626:android:45c658f6702e426080057b',
-    messagingSenderId: '71106830626',
-    projectId: 'ecrime-16037',
-    storageBucket: 'ecrime-16037.appspot.com',
+      apiKey: "AIzaSyC92w85s6N6h2pArCJCbvWMaknAV5dl828",
+      authDomain: "ecrime-16037.firebaseapp.com",
+      databaseURL: "https://ecrime-16037-default-rtdb.firebaseio.com",
+      projectId: "ecrime-16037",
+      storageBucket: "ecrime-16037.appspot.com",
+      messagingSenderId: "71106830626",
+      appId: "1:71106830626:web:bf4dc94092c1b35980057b"
   );
 }

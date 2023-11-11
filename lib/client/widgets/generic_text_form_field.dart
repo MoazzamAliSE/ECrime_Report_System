@@ -43,8 +43,8 @@ class GenericTextField extends StatelessWidget {
       maxLines: maxLines,
       minLines: minLines,
       enabled: enabled,
-      onSaved: onSaved,
-      
+      onChanged: onSaved,
+
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,

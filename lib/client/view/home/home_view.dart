@@ -1,16 +1,20 @@
+import 'package:ecrime/client/utils/utils.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
+import 'package:get/get.dart';
+
+import '../../view model/controller/home controller/home_controller.dart';
 
 class HomeScreenClient extends StatelessWidget {
-  const HomeScreenClient({super.key});
-
+  final controller=Get.put(HomeController());
+   HomeScreenClient({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
       color: AppColor.primaryColor,
       child: SafeArea(
         child: Scaffold(
-          drawer: const MyDrawer(),
+          drawer:  MyDrawer(),
           appBar: _buildAppBar(),
           body: BackgroundFrame(
             child: SingleChildScrollView(
@@ -55,7 +59,6 @@ class HomeScreenClient extends StatelessWidget {
       ),
     );
   }
-
   void firUpdateDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -73,7 +76,6 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Investigation Update',
                     onTap: () {
-                      
                       Navigator.pop(context);
                     },
                   ),
@@ -83,7 +85,6 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Status of FIR',
                     onTap: () {
-                      
                       Navigator.pop(context);
                     },
                   ),
@@ -105,7 +106,6 @@ class HomeScreenClient extends StatelessWidget {
       },
     );
   }
-
   void regComplainDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -141,7 +141,6 @@ class HomeScreenClient extends StatelessWidget {
       },
     );
   }
-
   Row _buildLowerButtons(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -150,32 +149,27 @@ class HomeScreenClient extends StatelessWidget {
           svgIcon: policeStation,
           text: "Find Police Station",
           onTap: () {
-            showNoImplementationDialog(context);
-            print("abc");
+            Utils.showSnackBar('Warnind', 'Not Implement yet', Icon((Icons.warning_amber)));
+
           },
         ),
         CardButtonReportWhite(
           svgIcon: generatePdf,
           text: "Generate Report",
           onTap: () {
-            showNoImplementationDialog(context);
-
-            print("abc");
+            Utils.showSnackBar('Warnind', 'Not Implement yet', Icon((Icons.warning_amber)));
           },
         ),
         CardButtonReportWhite(
           svgIcon: progress,
           text: "Progress",
           onTap: () {
-            showNoImplementationDialog(context);
-
-            print("abc");
+            Utils.showSnackBar('Warnind', 'Not Implement yet', Icon((Icons.warning_amber)));
           },
         ),
       ],
     );
   }
-
   Align _buildSubHeadingText() {
     return const Align(
       alignment: Alignment.centerLeft,
@@ -191,7 +185,6 @@ class HomeScreenClient extends StatelessWidget {
       ),
     );
   }
-
   Row _buildUpperButtons(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -225,7 +218,6 @@ class HomeScreenClient extends StatelessWidget {
       ],
     );
   }
-
   Text _buildHeadingText() {
     return Text(
       'How Can We help you',
@@ -236,7 +228,6 @@ class HomeScreenClient extends StatelessWidget {
       ),
     );
   }
-
   AppBar _buildAppBar() {
     return AppBar(
       title: Text(
