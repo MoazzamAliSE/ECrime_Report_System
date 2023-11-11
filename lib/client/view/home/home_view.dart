@@ -73,7 +73,7 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Investigation Update',
                     onTap: () {
-                      // Handle Option 1 tap
+                      
                       Navigator.pop(context);
                     },
                   ),
@@ -83,7 +83,7 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Status of FIR',
                     onTap: () {
-                      // Handle Option 2 tap
+                      
                       Navigator.pop(context);
                     },
                   ),
@@ -93,7 +93,7 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Investigator',
                     onTap: () {
-                      // Handle Option 3 tap
+                      
                       Navigator.pop(context);
                     },
                   ),
@@ -122,7 +122,7 @@ class HomeScreenClient extends StatelessWidget {
                   svgIcon: regFir,
                   text: 'Complain for Curruption',
                   onTap: () {
-                    // Handle Option 1 tap
+                    
                     Navigator.pop(context);
                   },
                 ),
@@ -130,7 +130,7 @@ class HomeScreenClient extends StatelessWidget {
                   svgIcon: regFir,
                   text: 'Complain for Services',
                   onTap: () {
-                    // Handle Option 2 tap
+                    
                     Navigator.pop(context);
                   },
                 ),

@@ -1,3 +1,4 @@
+import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:flutter/material.dart';
 
 class WomenHelpPage extends StatelessWidget {
@@ -20,48 +21,35 @@ class WomenHelpPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Women Help'),
+          centerTitle: true,
         ),
-        body: ListView.builder(
-          itemCount: topics.length,
-          itemBuilder: (context, index) {
-            return Card(
-              elevation: 4, // Add elevation here
-              margin: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 8), // Add padding here
-              child: ListTile(
-                title: Text("${index + 1} ${topics[index]}"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          WomenHelpDetailPage(topic: topics[index]),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-        )
-
-        // ListView.builder(
-        //   itemCount: topics.length,
-        //   itemBuilder: (context, index) {
-        //     return ListTile(
-        //       title: Text(topics[index]),
-        //       onTap: () {
-        //         Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //             builder: (context) =>
-        //                 WomenHelpDetailPage(topic: topics[index]),
-        //           ),
-        //         );
-        //       },
-        //     );
-        //   },
-        // ),
-        );
+        body: BackgroundFrame(
+          child: Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: ListView.builder(
+              itemCount: topics.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 4, 
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 8), 
+                  child: ListTile(
+                    title: Text("${index + 1} ${topics[index]}"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              WomenHelpDetailPage(topic: topics[index]),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ));
   }
 }
 
@@ -246,20 +234,22 @@ class WomenHelpDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(topic),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Details for $topic:',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              Text(getContent()),
-            ],
+      body: BackgroundFrame(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Details for $topic:',
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Text(getContent()),
+              ],
+            ),
           ),
         ),
       ),

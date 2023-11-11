@@ -31,7 +31,7 @@ class MyDrawer extends StatelessWidget {
             );
           },
         ),
-        const Divider(), // Divider after the first ListTile
+        const Divider(), 
         ListTile(
           title: const Text('Enter Suggestions'),
           onTap: () {
@@ -44,7 +44,7 @@ class MyDrawer extends StatelessWidget {
             );
           },
         ),
-        const Divider(), // Divider after the second ListTile
+        const Divider(), 
         ListTile(
           title: const Text('Helpline Contact'),
           onTap: () {
@@ -57,7 +57,7 @@ class MyDrawer extends StatelessWidget {
             );
           },
         ),
-        const Divider(), // Divider after the third ListTile
+        const Divider(), 
         ListTile(
           title: const Text(
             'Logout',
@@ -94,7 +94,7 @@ class MyDrawer extends StatelessWidget {
           CircleAvatar(
             radius: 40,
             backgroundColor: Colors.red,
-            // backgroundImage: AssetImage('assets/profile_pic.jpg'),
+            
           ),
           SizedBox(height: 10),
           Text(

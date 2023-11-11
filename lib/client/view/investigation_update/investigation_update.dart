@@ -1,9 +1,7 @@
-import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
+import 'package:ecrime/client/view/investigation_update/investigation_update.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:file_picker/file_picker.dart';
-import 'dart:io';
-import 'package:intl/intl.dart';
+
+export 'package:intl/intl.dart';
 
 class InvestigationDetailsPage extends StatefulWidget {
   const InvestigationDetailsPage({
@@ -30,61 +28,62 @@ class _InvestigationDetailsPageState extends State<InvestigationDetailsPage> {
       appBar: AppBar(
         title: const Text('Investigation Details'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInvestigationDetail('Case ID', '343294309243'),
-              _buildInvestigationDetail('Investigating Officer', 'ABC Name'),
-              _buildInvestigationDetail('Date Opened', '22/08/2022'),
-              _buildInvestigationDetail('Status', 'Accepted'),
-              _buildInvestigationDetail(
-                  'Description', 'Any number of lines from Firebase'),
-              const Divider(),
-              _buildDateTime(context),
-              const SizedBox(height: 20),
-              const Text(
-                'FIR Update',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              GenericTextField(
-                controller: firUpdateController,
-                maxLines: 5,
-                minLines: 5,
-                labelText: "Enter the updated information here",
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  _showImagePickerDialog(context);
-                },
-                child: const Text('Upload Document or Pic'),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 120,
-                // color: Colors.black12,
-                child: _uploadedFile != null
-                    ? _buildUploadedFile(context)
-                    : Container(),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Cancel'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Update'),
-                  ),
-                ],
-              ),
-            ],
+      body: BackgroundFrame(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildInvestigationDetail('Case ID', '343294309243'),
+                _buildInvestigationDetail('Investigating Officer', 'ABC Name'),
+                _buildInvestigationDetail('Date Opened', '22/08/2022'),
+                _buildInvestigationDetail('Status', 'Accepted'),
+                _buildInvestigationDetail(
+                    'Description', 'Any number of lines from Firebase'),
+                const Divider(),
+                _buildDateTime(context),
+                const SizedBox(height: 20),
+                const Text(
+                  'FIR Update',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                GenericTextField(
+                  controller: firUpdateController,
+                  maxLines: 5,
+                  minLines: 5,
+                  labelText: "Enter the updated information here",
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    _showImagePickerDialog(context);
+                  },
+                  child: const Text('Upload Document or Pic'),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 120,
+                  child: _uploadedFile != null
+                      ? _buildUploadedFile(context)
+                      : Container(),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Cancel'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Update'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -107,23 +106,21 @@ class _InvestigationDetailsPageState extends State<InvestigationDetailsPage> {
               lastDate: DateTime(2025),
             );
 
-            if (pickedDateTime != null) {
-              TimeOfDay? pickedTime = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.fromDateTime(selectedDateTime),
-              );
+            TimeOfDay? pickedTime = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.fromDateTime(selectedDateTime),
+            );
 
-              if (pickedTime != null) {
-                setState(() {
-                  selectedDateTime = DateTime(
-                    pickedDateTime.year,
-                    pickedDateTime.month,
-                    pickedDateTime.day,
-                    pickedTime.hour,
-                    pickedTime.minute,
-                  );
-                });
-              }
+            if (pickedTime != null) {
+              setState(() {
+                selectedDateTime = DateTime(
+                  pickedDateTime.year,
+                  pickedDateTime.month,
+                  pickedDateTime.day,
+                  pickedTime.hour,
+                  pickedTime.minute,
+                );
+              });
             }
           },
           child: const Text('Update Date and Time'),

@@ -11,10 +11,10 @@ class GenericTextField extends StatelessWidget {
   final int? maxLines;
   final int? minLines;
   final bool? enabled;
-  // final ValueChanged<bool>? onUnfocus;
+  
   FormFieldSetter<String>? onSaved;
   final FormFieldValidator<String>? validator;
-  // final InputDecoration? decoration;
+  
 
   GenericTextField({
     Key? key,
@@ -28,10 +28,10 @@ class GenericTextField extends StatelessWidget {
     this.maxLines = 1,
     this.minLines = 1,
     this.enabled = true,
-    // this.onUnfocus,
+    
     this.onSaved,
     this.validator,
-    // this.decoration,
+    
   }) : super(key: key);
 
   @override
@@ -44,7 +44,7 @@ class GenericTextField extends StatelessWidget {
       minLines: minLines,
       enabled: enabled,
       onSaved: onSaved,
-      // validator: validator,
+      
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,

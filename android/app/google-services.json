@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "71106830626",
+    "project_id": "ecrime-16037",
+    "storage_bucket": "ecrime-16037.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71106830626:android:45c658f6702e426080057b",
+        "android_client_info": {
+          "package_name": "com.example.ecrime"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOccw_jpjAuisetCS_wrzFCjbd0EwfZNk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

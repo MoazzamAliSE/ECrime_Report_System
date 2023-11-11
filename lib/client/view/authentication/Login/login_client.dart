@@ -29,7 +29,6 @@ class _LoginPageClientState extends State<LoginPageClient> {
       print("$user aaa");
 
       if (user != null) {
-        // Check if the user is an admin or a normal user in Firestore
         DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
@@ -39,7 +38,6 @@ class _LoginPageClientState extends State<LoginPageClient> {
           bool isAdmin = userSnapshot['isAdmin'] ?? false;
 
           if (isAdmin) {
-            // User is an admin, show dialog and do not navigate
             showDialog(
               context: context,
               builder: (context) {
@@ -50,7 +48,7 @@ class _LoginPageClientState extends State<LoginPageClient> {
                   actions: [
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context); // Close the dialog
+                        Navigator.pop(context);
                       },
                       child: const Text('OK'),
                     ),
@@ -58,13 +56,7 @@ class _LoginPageClientState extends State<LoginPageClient> {
                 );
               },
             );
-          } else {
-            // User is a normal user, navigate to FirUser home screen
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => FirUserHomePage()),
-            // );
-          }
+          } else {}
         }
       }
     } catch (e) {
@@ -86,37 +78,38 @@ class _LoginPageClientState extends State<LoginPageClient> {
         title: const Text('Login'),
         centerTitle: true,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'User Login',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                _buildEmailField(),
-                const SizedBox(height: 15),
-                _buildPasswordField(),
-                const SizedBox(height: 15),
-                _buildForgetButton(context),
-                const SizedBox(height: 15),
-                _buildLoginButton(),
-                const SizedBox(height: 10),
-                //yeh daikh layna
-                if (_errorMessage.isNotEmpty)
-                  Text(
-                    _errorMessage,
-                    style: const TextStyle(color: Colors.red),
+      body: BackgroundFrame(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'User Login',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                const SizedBox(height: 10),
-                _buildSignUpButton(context),
-                const SizedBox(height: 10),
-              ],
+                  const SizedBox(height: 20),
+                  _buildEmailField(),
+                  const SizedBox(height: 15),
+                  _buildPasswordField(),
+                  const SizedBox(height: 15),
+                  _buildForgetButton(context),
+                  const SizedBox(height: 15),
+                  _buildLoginButton(),
+                  const SizedBox(height: 10),
+                  if (_errorMessage.isNotEmpty)
+                    Text(
+                      _errorMessage,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  const SizedBox(height: 10),
+                  _buildSignUpButton(context),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
         ),

@@ -6,7 +6,7 @@ class ImageCarouselSlider extends StatelessWidget {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA0BGmxorF_pvFWmlMR9RXR6ntfX1EeZM0rhFsobnqeBj0CPEs-u_iy2xUYBGUyqowgdk&usqp=CAU',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMZHTnhCkPxIhv7D9sDvwxaP_5UnyEL0mYi-vh_4U-wFYgXdnmMLL-wpvBnl-quwBPERo&usqp=CAU',
 
-    // Add more police-related image URLs as needed
+    
   ];
 
   ImageCarouselSlider({super.key});

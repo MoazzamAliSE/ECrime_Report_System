@@ -1,4 +1,4 @@
-import 'package:ecrime/admin/view/authentication/sign_up.dart';
+import 'package:ecrime/admin/view/authentication/signup_admin/sign_up.dart';
 import 'package:ecrime/client/widgets/generic_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,7 +30,7 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
         password: password,
       );
       User? user = userCredential.user;
-      // Check if the user is an admin
+      
       if (user != null) {
         DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
             .collection('users')
@@ -46,7 +46,7 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
               MaterialPageRoute(builder: (context) => const AdminHomePage()),
             );
           } else {
-            // Display an error message for non-admin users
+            
             showDialog(
               context: context,
               builder: (context) {
@@ -70,7 +70,7 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
       }
     } catch (e) {
       print('Error during login: $e');
-      // Display an error message
+      
       showDialog(
         context: context,
         builder: (context) {
@@ -133,7 +133,7 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SignupPage()),
+              MaterialPageRoute(builder: (context) => const SignupPageAdmin()),
             );
           },
           child: const Text('Sign Up'),

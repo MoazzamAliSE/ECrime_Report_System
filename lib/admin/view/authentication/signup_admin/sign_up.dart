@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecrime/admin/view/authentication/login_admin/login_admin.dart';
@@ -6,14 +6,14 @@ import 'package:ecrime/client/widgets/generic_text_form_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+class SignupPageAdmin extends StatefulWidget {
+  const SignupPageAdmin({Key? key}) : super(key: key);
 
   @override
-  _SignupPageState createState() => _SignupPageState();
+  _SignupPageAdminState createState() => _SignupPageAdminState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupPageAdminState extends State<SignupPageAdmin> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -32,7 +32,7 @@ class _SignupPageState extends State<SignupPage> {
     String confirmPassword = _confirmPasswordController.text;
 
     if (password != confirmPassword) {
-      // Display an error message if passwords don't match
+      
 
       _showDialog('Password Mismatch',
           'Passwords do not match. Please enter matching passwords.');
@@ -48,7 +48,7 @@ class _SignupPageState extends State<SignupPage> {
       );
       User? user = userCredential.user;
       if (user != null) {
-        // Add user information to Firestore
+        
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'isAdmin': true,
           'email': email.toString(),
@@ -62,7 +62,7 @@ class _SignupPageState extends State<SignupPage> {
       }
     } catch (e) {
       print('Error during signup: $e');
-      // Display an error message
+      
 
       _showDialog('Signup Failed', 'Error during signup. Please try again.');
     } finally {
@@ -117,7 +117,7 @@ class _SignupPageState extends State<SignupPage> {
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context); // Go back to the login page
+                    Navigator.pop(context); 
                   },
                   child: const Text('Go to Login'),
                 ),

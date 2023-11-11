@@ -1,19 +1,6 @@
+import 'package:ecrime/client/view/widgets/background_frame.dart';
+import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ComplaintPage(),
-    );
-  }
-}
 
 class ComplaintPage extends StatefulWidget {
   const ComplaintPage({super.key});
@@ -23,8 +10,8 @@ class ComplaintPage extends StatefulWidget {
 }
 
 class _ComplaintPageState extends State<ComplaintPage> {
-  String selectedInstitute = 'Police'; // Default institute
-  String selectedProvince = 'Punjab'; // Default institute
+  String selectedInstitute = 'Police'; 
+  String selectedProvince = 'Punjab'; 
   List<String> pakistanProvinces = [
     'Punjab',
     'Sindh',
@@ -35,74 +22,76 @@ class _ComplaintPageState extends State<ComplaintPage> {
   ];
 
   List<String> institutesList = ['Police', 'Education', 'Other'];
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Complaint for Corruption'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Report Corruption',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      body: BackgroundFrame(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Report Corruption',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Submit your complaint below:',
-              style: TextStyle(
-                fontSize: 16,
+              const SizedBox(height: 10),
+              const Text(
+                'Submit your complaint below:',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text('Select Institute:'),
-            const SizedBox(height: 20),
-            _buildDropdown(
-              'Select Institute',
-              institutesList,
-              (value) => selectedInstitute = value!,
-            ),
-            const SizedBox(height: 20),
-            const Text('Region'),
-            const SizedBox(height: 20),
-            _buildDropdown(
-              'Region',
-              pakistanProvinces,
-              (value) => selectedInstitute = value!,
-            ),
-            const SizedBox(height: 10),
-            const Text('Enter Details:'),
-            const TextField(
-              decoration: InputDecoration(
+              const SizedBox(height: 20),
+              const Text('Select Institute:'),
+              const SizedBox(height: 10),
+              _buildDropdown(
+                'Select Institute',
+                institutesList,
+                (value) => selectedInstitute = value!,
+              ),
+              const SizedBox(height: 20),
+              const Text('Region'),
+              const SizedBox(height: 10),
+              _buildDropdown(
+                'Region',
+                pakistanProvinces,
+                (value) => selectedInstitute = value!,
+              ),
+              const SizedBox(height: 10),
+              const Text('Enter Details:'),
+              const SizedBox(height: 10),
+              GenericTextField(
                 hintText: 'Enter details about corruption...',
-                border: OutlineInputBorder(),
+                maxLines: 4,
+                minLines: 4,
+                controller: null,
               ),
-              maxLines: 4,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Add logic to submit the complaint
-                print('Complaint Submitted!');
-              },
-              child: const Text('Submit Complaint'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Add logic for uploading any document, picture, or video
-                print('Upload Document/Picture/Video');
-              },
-              child: const Text('Upload Document/Picture/Video'),
-            ),
-          ],
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  
+                  print('Upload Document/Picture/Video');
+                },
+                child: const Text('Upload Document/Picture/Video'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  
+                  print('Complaint Submitted!');
+                },
+                child: const Text('Submit Complaint'),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -367,12 +367,12 @@ class _RegisterFIRState extends State<RegisterFIR> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('FIR Form'),
-        ),
-        body: Form(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('FIR Form'),
+      ),
+      body: BackgroundFrame(
+        child: Form(
           key: _formKey,
           child: Stepper(
             type: StepperType.horizontal,

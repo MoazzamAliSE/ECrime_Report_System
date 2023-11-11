@@ -83,31 +83,33 @@ class _CompleteRegistrationPageState extends State<CompleteRegistrationPage> {
       appBar: AppBar(
         title: const Text('Complete Registration'),
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildImagePicker(),
-                const SizedBox(height: 40),
-                _buildFullNameField(),
-                const SizedBox(height: 20),
-                _buildPhoneNumberField(),
-                const SizedBox(height: 20),
-                _buildSignupButton(context),
-              ],
-            ),
-          ),
-          if (_loading)
-            Container(
-              color: Colors.black54,
-              child: const Center(
-                child: CircularProgressIndicator(),
+      body: BackgroundFrame(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildImagePicker(),
+                  const SizedBox(height: 40),
+                  _buildFullNameField(),
+                  const SizedBox(height: 20),
+                  _buildPhoneNumberField(),
+                  const SizedBox(height: 20),
+                  _buildSignupButton(context),
+                ],
               ),
             ),
-        ],
+            if (_loading)
+              Container(
+                color: Colors.black54,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -126,11 +128,6 @@ class _CompleteRegistrationPageState extends State<CompleteRegistrationPage> {
 
         _showDialog('Success', 'Registration completed successfully!');
         Navigator.pop(context);
-
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const FirUserHomePage()),
-        // );
       },
       child: const Text('Sign Up'),
     );

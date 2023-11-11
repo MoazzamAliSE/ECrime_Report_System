@@ -72,7 +72,7 @@ class HelplineContactPage extends StatelessWidget {
               text: number,
               style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 18), // Adjust the font size as needed
+                  fontSize: 18), 
             ),
           ],
         ),
@@ -80,13 +80,13 @@ class HelplineContactPage extends StatelessWidget {
     );
   }
 
-  // Widget _buildHelplineItem(String title, String number) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 4.0),
-  //     child: Text(
-  //       '$title: $number',
-  //       style: const TextStyle(fontSize: 16),
-  //     ),
-  //   );
-  // }
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }

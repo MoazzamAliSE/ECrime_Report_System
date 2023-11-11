@@ -1,5 +1,4 @@
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
- 
 
 class SignUpPageClient extends StatefulWidget {
   const SignUpPageClient({Key? key}) : super(key: key);
@@ -32,14 +31,14 @@ class _SignUpPageClientState extends State<SignUpPageClient> {
       User? user = userCredential.user;
 
       if (user != null) {
-        // Add user details to Firestore
+        
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'username': _usernameController.text,
           'email': _emailController.text,
           'isAdmin': false,
         });
 
-        // Navigate to CompleteRegistrationPage
+        
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -49,7 +48,7 @@ class _SignUpPageClientState extends State<SignUpPageClient> {
       }
     } catch (e) {
       print('Error: $e');
-      // Handle registration errors
+      
       _showDialog('Error', 'Registration failed. Please try again.');
     } finally {
       setState(() {
@@ -84,47 +83,50 @@ class _SignUpPageClientState extends State<SignUpPageClient> {
       appBar: AppBar(
         title: const Text('Sign Up'),
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Sign Up',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 40),
-                  _buildUserNameField(),
-                  const SizedBox(height: 15),
-                  _buildEmailField(),
-                  const SizedBox(height: 15),
-                  _buildPasswordField(),
-                  const SizedBox(height: 15),
-                  _buildConfirmPasswordField(),
-                  const SizedBox(height: 40),
-                  _completeRegistrationButton(),
-                  const SizedBox(height: 15),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Go back to the login page
-                    },
-                    child: const Text('Go to Login'),
-                  ),
-                ],
+      body: BackgroundFrame(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Sign Up',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 40),
+                    _buildUserNameField(),
+                    const SizedBox(height: 15),
+                    _buildEmailField(),
+                    const SizedBox(height: 15),
+                    _buildPasswordField(),
+                    const SizedBox(height: 15),
+                    _buildConfirmPasswordField(),
+                    const SizedBox(height: 40),
+                    _completeRegistrationButton(),
+                    const SizedBox(height: 15),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); 
+                      },
+                      child: const Text('Go to Login'),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          if (_loading)
-            Container(
-              color: Colors.black54,
-              child: const Center(
-                child: CircularProgressIndicator(),
+            if (_loading)
+              Container(
+                color: Colors.black54,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
