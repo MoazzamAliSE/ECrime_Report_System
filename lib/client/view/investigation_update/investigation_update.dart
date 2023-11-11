@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:ecrime/client/view/investigation_update/investigation_update.dart';
+import 'package:ecrime/client/view/widgets/background_frame.dart';
+import 'package:ecrime/client/widgets/generic_text_form_field.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 export 'package:intl/intl.dart';
 
@@ -114,7 +120,7 @@ class _InvestigationDetailsPageState extends State<InvestigationDetailsPage> {
             if (pickedTime != null) {
               setState(() {
                 selectedDateTime = DateTime(
-                  pickedDateTime.year,
+                  pickedDateTime!.year,
                   pickedDateTime.month,
                   pickedDateTime.day,
                   pickedTime.hour,
