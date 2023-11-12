@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../../../widgets/widgets_barrel.dart';
 
 class SignupNameField extends StatelessWidget {
-   SignupNameField({super.key});
-  final controller=Get.put(SignUpController());
+  SignupNameField({super.key});
+  final controller = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
     return GenericTextField(

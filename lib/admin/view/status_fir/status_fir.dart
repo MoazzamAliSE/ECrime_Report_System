@@ -1,23 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: AdminHomePage(),
-    );
-  }
-}
-
-class AdminHomePage extends StatelessWidget {
-  const AdminHomePage({super.key});
+class StatusFirScreenAdmin extends StatelessWidget {
+  const StatusFirScreenAdmin({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,12 +68,10 @@ class FIRStatusListItem extends StatelessWidget {
   const FIRStatusListItem({super.key, required this.firSnapshot});
 
   void _changeFIRStatus(String newStatus, BuildContext context) {
-    
     FirebaseFirestore.instance
         .collection('firs')
         .doc(firSnapshot.id)
         .update({'status': newStatus}).then((_) {
-      
       showDialog(
         context: context,
         builder: (context) {
@@ -108,7 +91,6 @@ class FIRStatusListItem extends StatelessWidget {
         },
       );
     }).catchError((error) {
-      
       print('Error updating FIR status: $error');
     });
   }

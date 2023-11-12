@@ -4,11 +4,11 @@ import '../../../../view model/controller/authentication_controller/signIn_contr
 import '../../../../widgets/generic_text_form_field.dart';
 
 class LoginEmailField extends StatelessWidget {
-   LoginEmailField({super.key});
-  final controller =Get.put(SignInController());
+  LoginEmailField({super.key});
+  final controller = Get.put(SignInController());
   @override
   Widget build(BuildContext context) {
-    return  GenericTextField(
+    return GenericTextField(
       controller: controller.userEmail,
       labelText: 'Email',
       hintText: 'Enter your email',

@@ -15,11 +15,18 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     SplashServices.checkIsLogin();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(child: Image.asset(AppImages.logo,height: 150,width: 150,)),
+      body: Center(
+        child: Image.asset(
+          AppImages.logo,
+          height: 150,
+          width: 150,
+        ),
+      ),
     );
   }
 }

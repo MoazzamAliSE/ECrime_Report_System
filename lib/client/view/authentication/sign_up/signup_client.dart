@@ -13,8 +13,3 @@ class SignUpPageClient extends StatelessWidget {
     );
   }
 }
-
-
-
-
-

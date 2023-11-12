@@ -1,4 +1,5 @@
 import 'package:ecrime/client/utils/utils.dart';
+import 'package:ecrime/client/view/complain_corruption/complain_corruption.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:get/get.dart';
@@ -6,15 +7,15 @@ import 'package:get/get.dart';
 import '../../view model/controller/home controller/home_controller.dart';
 
 class HomeScreenClient extends StatelessWidget {
-  final controller=Get.put(HomeController());
-   HomeScreenClient({super.key});
+  final controller = Get.put(HomeController());
+  HomeScreenClient({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
       color: AppColor.primaryColor,
       child: SafeArea(
         child: Scaffold(
-          drawer:  MyDrawer(),
+          drawer: MyDrawer(),
           appBar: _buildAppBar(),
           body: BackgroundFrame(
             child: SingleChildScrollView(
@@ -59,6 +60,7 @@ class HomeScreenClient extends StatelessWidget {
       ),
     );
   }
+
   void firUpdateDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -94,7 +96,6 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Investigator',
                     onTap: () {
-                      
                       Navigator.pop(context);
                     },
                   ),
@@ -106,7 +107,11 @@ class HomeScreenClient extends StatelessWidget {
       },
     );
   }
+
   void regComplainDialog(BuildContext context) {
+    var complainCorruption = 'Corruption';
+    var complainService = 'Service';
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -122,16 +127,26 @@ class HomeScreenClient extends StatelessWidget {
                   svgIcon: regFir,
                   text: 'Complain for Curruption',
                   onTap: () {
-                    
-                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ComplainPage(complainType: complainCorruption),
+                        ));
+
+                    // Navigator.pop(context);
                   },
                 ),
                 CardButtonReport(
                   svgIcon: regFir,
                   text: 'Complain for Services',
                   onTap: () {
-                    
-                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ComplainPage(complainType: complainCorruption),
+                        ));
                   },
                 ),
               ],
@@ -141,6 +156,7 @@ class HomeScreenClient extends StatelessWidget {
       },
     );
   }
+
   Row _buildLowerButtons(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -149,27 +165,30 @@ class HomeScreenClient extends StatelessWidget {
           svgIcon: policeStation,
           text: "Find Police Station",
           onTap: () {
-            Utils.showSnackBar('Warnind', 'Not Implement yet', Icon((Icons.warning_amber)));
-
+            Utils.showSnackBar('Warnind', 'Not Implement yet',
+                const Icon((Icons.warning_amber)));
           },
         ),
         CardButtonReportWhite(
           svgIcon: generatePdf,
           text: "Generate Report",
           onTap: () {
-            Utils.showSnackBar('Warnind', 'Not Implement yet', Icon((Icons.warning_amber)));
+            Utils.showSnackBar('Warnind', 'Not Implement yet',
+                const Icon((Icons.warning_amber)));
           },
         ),
         CardButtonReportWhite(
           svgIcon: progress,
           text: "Progress",
           onTap: () {
-            Utils.showSnackBar('Warnind', 'Not Implement yet', Icon((Icons.warning_amber)));
+            Utils.showSnackBar('Warnind', 'Not Implement yet',
+                const Icon((Icons.warning_amber)));
           },
         ),
       ],
     );
   }
+
   Align _buildSubHeadingText() {
     return const Align(
       alignment: Alignment.centerLeft,
@@ -185,6 +204,7 @@ class HomeScreenClient extends StatelessWidget {
       ),
     );
   }
+
   Row _buildUpperButtons(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -218,6 +238,7 @@ class HomeScreenClient extends StatelessWidget {
       ],
     );
   }
+
   Text _buildHeadingText() {
     return Text(
       'How Can We help you',
@@ -228,6 +249,7 @@ class HomeScreenClient extends StatelessWidget {
       ),
     );
   }
+
   AppBar _buildAppBar() {
     return AppBar(
       title: Text(

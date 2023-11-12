@@ -2,16 +2,16 @@ import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:flutter/material.dart';
 
-class ComplaintPage extends StatefulWidget {
-  const ComplaintPage({super.key});
-
+class ComplainPage extends StatefulWidget {
+  const ComplainPage({super.key, required this.complainType});
+  final String complainType;
   @override
-  _ComplaintPageState createState() => _ComplaintPageState();
+  _ComplainPageState createState() => _ComplainPageState();
 }
 
-class _ComplaintPageState extends State<ComplaintPage> {
-  String selectedInstitute = 'Police'; 
-  String selectedProvince = 'Punjab'; 
+class _ComplainPageState extends State<ComplainPage> {
+  String selectedInstitute = 'Police';
+  String selectedProvince = 'Punjab';
   List<String> pakistanProvinces = [
     'Punjab',
     'Sindh',
@@ -77,7 +77,6 @@ class _ComplaintPageState extends State<ComplaintPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  
                   print('Upload Document/Picture/Video');
                 },
                 child: const Text('Upload Document/Picture/Video'),
@@ -85,7 +84,6 @@ class _ComplaintPageState extends State<ComplaintPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  
                   print('Complaint Submitted!');
                 },
                 child: const Text('Submit Complaint'),

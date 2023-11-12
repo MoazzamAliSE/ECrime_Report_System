@@ -13,7 +13,8 @@ class ForgotPasswordBtn extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const ForgetPasswordPage()),
+                builder: (context) => const ForgetPasswordPage(),
+              ),
             );
           },
           child: const Text(

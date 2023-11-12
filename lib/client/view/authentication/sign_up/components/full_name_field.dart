@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class FullNameField extends StatelessWidget {
   FullNameField({super.key});
-  final controller=Get.put(SignUpController());
+  final controller = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {

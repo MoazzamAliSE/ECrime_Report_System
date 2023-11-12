@@ -1,5 +1,3 @@
-
-
 import 'package:ecrime/client/view/investigation_update/investigation_update.dart';
 
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
@@ -46,7 +44,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   return null;
                 },
               ),
-
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
@@ -100,7 +97,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     );
                   } catch (e) {
                     print('Error: $e');
-                    
                   }
                 },
                 child: const Text('Send OTP'),
@@ -108,7 +104,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               const SizedBox(
                 height: 150,
               ),
-              
               if (_showTimer)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),

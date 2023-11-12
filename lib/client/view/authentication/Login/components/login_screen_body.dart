@@ -8,10 +8,10 @@ import 'login_button.dart';
 import 'login_email_field.dart';
 import 'move_signup_btn.dart';
 
-class LoginScreenBody extends StatelessWidget {
-  LoginScreenBody({super.key});
-  final controller =Get.put(SignInController());
-  final _formKey=GlobalKey<FormState>();
+class LoginScreenClientBody extends StatelessWidget {
+  LoginScreenClientBody({super.key});
+  final controller = Get.put(SignInController());
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -37,12 +37,14 @@ class LoginScreenBody extends StatelessWidget {
               LoginButton(formKey: _formKey),
               const SizedBox(height: 10),
               if (controller.errorMessage.isNotEmpty)
-                Obx(() => Text(
-                  controller.errorMessage.value,
-                  style: const TextStyle(color: Colors.red),
-                ),),
+                Obx(
+                  () => Text(
+                    controller.errorMessage.value,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
               const SizedBox(height: 10),
-              MoveSignUpButton(),
+              const MoveSignUpButton(),
               const SizedBox(height: 10),
             ],
           ),

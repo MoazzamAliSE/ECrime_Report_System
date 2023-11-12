@@ -10,8 +10,8 @@ import 'package:ecrime/client/view/home/drawer/suggestion_page/suggestion_page.d
 import 'package:get/get.dart';
 
 class MyDrawer extends StatelessWidget {
-   MyDrawer({super.key});
-   final controller=Get.put(HomeController());
+  MyDrawer({super.key});
+  final controller = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -37,7 +37,7 @@ class MyDrawer extends StatelessWidget {
             );
           },
         ),
-        const Divider(), 
+        const Divider(),
         ListTile(
           title: const Text('Enter Suggestions'),
           onTap: () {
@@ -50,7 +50,7 @@ class MyDrawer extends StatelessWidget {
             );
           },
         ),
-        const Divider(), 
+        const Divider(),
         ListTile(
           title: const Text('Helpline Contact'),
           onTap: () {
@@ -63,7 +63,7 @@ class MyDrawer extends StatelessWidget {
             );
           },
         ),
-        const Divider(), 
+        const Divider(),
         ListTile(
           title: const Text(
             'Logout',
@@ -87,38 +87,37 @@ class MyDrawer extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColor.primaryColor,
       ),
-      child:  Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CachedNetworkImage(imageUrl: controller.userData!['profilePicture']!,
-          placeholder: (context, url) {
-             return CircleAvatar(
-              radius: 40,
-              backgroundColor: Colors.white,
-              child: Center(
-                child: SizedBox(
-                  height: 15,
-                  width: 15,
-                  child: CircularProgressIndicator(
-                    color: AppColor.primaryColor,
+          CachedNetworkImage(
+            imageUrl: controller.userData!['profilePicture']!,
+            placeholder: (context, url) {
+              return CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.white,
+                child: Center(
+                  child: SizedBox(
+                    height: 15,
+                    width: 15,
+                    child: CircularProgressIndicator(
+                      color: AppColor.primaryColor,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-          imageBuilder: (context, imageProvider) {
-            return CircleAvatar(
-              radius: 50,
-              backgroundImage: imageProvider,
-            );
-          },
-
+              );
+            },
+            imageBuilder: (context, imageProvider) {
+              return CircleAvatar(
+                radius: 50,
+                backgroundImage: imageProvider,
+              );
+            },
           ),
-
-           Text(
-           controller.userData!['userName']!,
-            style: TextStyle(
+          Text(
+            controller.userData!['userName']!,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
             ),

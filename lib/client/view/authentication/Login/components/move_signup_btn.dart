@@ -13,7 +13,9 @@ class MoveSignUpButton extends StatelessWidget {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const SignUpPageClient()),
+              MaterialPageRoute(
+                builder: (context) => const SignUpPageClient(),
+              ),
             );
           },
           child: const Text('Sign Up'),

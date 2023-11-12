@@ -6,15 +6,16 @@ import '../../../widgets/widgets_barrel.dart';
 
 class CompleteRegistrationBtn extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-   CompleteRegistrationBtn({super.key, required this.formKey});
+  const CompleteRegistrationBtn({super.key, required this.formKey});
   @override
-  State<CompleteRegistrationBtn> createState() => _CompleteRegistrationBtnState();
+  State<CompleteRegistrationBtn> createState() =>
+      _CompleteRegistrationBtnState();
 }
 
 class _CompleteRegistrationBtnState extends State<CompleteRegistrationBtn> {
-  final controller=Get.put(SignUpController());
+  final controller = Get.put(SignUpController());
   completeRegistration() async {
-    if(widget.formKey.currentState!.validate()){
+    if (widget.formKey.currentState!.validate()) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -23,14 +24,17 @@ class _CompleteRegistrationBtnState extends State<CompleteRegistrationBtn> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        if (controller.password.text.toString() == controller.confirmPassword.text.toString()) {
+        if (controller.password.text.toString() ==
+            controller.confirmPassword.text.toString()) {
           await completeRegistration();
         } else {
-          Utils.showSnackBar('Warning', 'Password mismatched', Icon(Icons.warning_amber));
+          Utils.showSnackBar('Warning', 'Password mismatched',
+              const Icon(Icons.warning_amber));
         }
       },
       child: const Text('Complete Registration'),

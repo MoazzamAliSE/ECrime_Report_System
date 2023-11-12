@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../../../../view model/controller/authentication_controller/signUp_controller.dart';
 
 class SignUpEmailField extends StatelessWidget {
-   SignUpEmailField({super.key});
-  final controller=Get.put(SignUpController());
+  SignUpEmailField({super.key});
+  final controller = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
     return GenericTextField(

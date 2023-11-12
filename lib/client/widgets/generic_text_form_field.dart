@@ -1,3 +1,4 @@
+import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:flutter/material.dart';
 
 class GenericTextField extends StatelessWidget {
@@ -11,10 +12,9 @@ class GenericTextField extends StatelessWidget {
   final int? maxLines;
   final int? minLines;
   final bool? enabled;
-  
+
   FormFieldSetter<String>? onSaved;
   final FormFieldValidator<String>? validator;
-  
 
   GenericTextField({
     Key? key,
@@ -28,10 +28,8 @@ class GenericTextField extends StatelessWidget {
     this.maxLines = 1,
     this.minLines = 1,
     this.enabled = true,
-    
     this.onSaved,
     this.validator,
-    
   }) : super(key: key);
 
   @override
@@ -44,7 +42,6 @@ class GenericTextField extends StatelessWidget {
       minLines: minLines,
       enabled: enabled,
       onChanged: onSaved,
-
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
@@ -57,7 +54,7 @@ class GenericTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+          borderSide: BorderSide(color: AppColor.primaryColor, width: 2.0),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -71,7 +68,6 @@ class GenericTextField extends StatelessWidget {
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-
       validator: (value) {
         if (validator != null) {
           return validator!(value);

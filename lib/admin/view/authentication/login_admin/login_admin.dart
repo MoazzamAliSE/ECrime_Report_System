@@ -1,3 +1,4 @@
+import 'package:ecrime/admin/view/admin_home/admin_home.dart';
 import 'package:ecrime/admin/view/authentication/signup_admin/sign_up.dart';
 import 'package:ecrime/client/widgets/generic_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
         password: password,
       );
       User? user = userCredential.user;
-      
+
       if (user != null) {
         DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
             .collection('users')
@@ -46,7 +47,6 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
               MaterialPageRoute(builder: (context) => const AdminHomePage()),
             );
           } else {
-            
             showDialog(
               context: context,
               builder: (context) {
@@ -70,7 +70,7 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
       }
     } catch (e) {
       print('Error during login: $e');
-      
+
       showDialog(
         context: context,
         builder: (context) {
@@ -188,18 +188,18 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
   }
 }
 
-class AdminHomePage extends StatelessWidget {
-  const AdminHomePage({super.key});
+// class HomeScreenAdmin extends StatelessWidget {
+//   const HomeScreenAdmin({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Home Page'),
-      ),
-      body: const Center(
-        child: Text('Welcome, Admin!'),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Admin Home Page'),
+//       ),
+//       body: const Center(
+//         child: Text('Welcome, Admin!'),
+//       ),
+//     );
+//   }
+// }

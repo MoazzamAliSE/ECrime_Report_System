@@ -1,6 +1,5 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecrime/admin/view/admin_home/admin_home.dart';
 import 'package:ecrime/admin/view/authentication/login_admin/login_admin.dart';
 import 'package:ecrime/client/widgets/generic_text_form_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,8 +31,6 @@ class _SignupPageAdminState extends State<SignupPageAdmin> {
     String confirmPassword = _confirmPasswordController.text;
 
     if (password != confirmPassword) {
-      
-
       _showDialog('Password Mismatch',
           'Passwords do not match. Please enter matching passwords.');
       _loading = false;
@@ -48,7 +45,6 @@ class _SignupPageAdminState extends State<SignupPageAdmin> {
       );
       User? user = userCredential.user;
       if (user != null) {
-        
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'isAdmin': true,
           'email': email.toString(),
@@ -62,7 +58,6 @@ class _SignupPageAdminState extends State<SignupPageAdmin> {
       }
     } catch (e) {
       print('Error during signup: $e');
-      
 
       _showDialog('Signup Failed', 'Error during signup. Please try again.');
     } finally {
@@ -117,7 +112,7 @@ class _SignupPageAdminState extends State<SignupPageAdmin> {
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context); 
+                    Navigator.pop(context);
                   },
                   child: const Text('Go to Login'),
                 ),

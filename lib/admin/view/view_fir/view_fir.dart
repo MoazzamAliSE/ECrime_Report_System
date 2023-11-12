@@ -1,154 +1,86 @@
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:chewie/chewie.dart';
-import 'package:video_player/video_player.dart';
+import 'package:ecrime/admin/view/view_admin_barrel.dart';
+import 'package:intl/intl.dart';
 
-class ViewFIRsPage extends StatelessWidget {
+class ViewFIRsPage extends StatefulWidget {
   const ViewFIRsPage({super.key});
 
+  @override
+  State<ViewFIRsPage> createState() => _ViewFIRsPageState();
+}
+
+class _ViewFIRsPageState extends State<ViewFIRsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('View FIRs'),
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('firs').snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          }
+      body: BackgroundFrame(
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('firs').snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          List<QueryDocumentSnapshot> firs = snapshot.data!.docs;
+            List<QueryDocumentSnapshot> firs = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: firs.length,
-            itemBuilder: (context, index) {
-              return FIRListItem(firSnapshot: firs[index]);
-            },
-          );
-        },
+            return ListView.builder(
+              itemCount: firs.length,
+              itemBuilder: (context, index) {
+                return FIRListItem(firSnapshot: firs[index]);
+              },
+            );
+          },
+        ),
       ),
     );
   }
 }
 
-class FIRListItem extends StatelessWidget {
-  final QueryDocumentSnapshot firSnapshot;
+//dummy data
 
-  const FIRListItem({super.key, required this.firSnapshot});
+void addDummyFIRs() async {
+  CollectionReference firs = FirebaseFirestore.instance.collection('firs');
 
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(firSnapshot['userImage']),
-      ),
-      title: Text('FIR Number ${firSnapshot['firNumber']}'),
-      subtitle: Text('Submitted at ${firSnapshot['timestamp']}'),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FIRDetailPage(firSnapshot: firSnapshot),
-          ),
-        );
-      },
-    );
-  }
-}
+  QuerySnapshot querySnapshot =
+      await firs.where('firNumber', isEqualTo: '456').get();
 
-class FIRDetailPage extends StatelessWidget {
-  final QueryDocumentSnapshot firSnapshot;
+  if (querySnapshot.docs.isNotEmpty) {
+    QueryDocumentSnapshot existingFIR = querySnapshot.docs.first;
+    String formattedTimestamp =
+        DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
 
-  const FIRDetailPage({super.key, required this.firSnapshot});
+    await existingFIR.reference.update({
+      'timestamp': formattedTimestamp,
+    });
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('FIR Number ${firSnapshot['firNumber']}'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text('Description: ${firSnapshot['description']}'),
-            const SizedBox(height: 20),
-            const Text('Files:'),
-            const SizedBox(height: 10),
-            ..._buildFileWidgets(firSnapshot, context),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Assign FIR'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+    print('Existing FIR updated');
+  } else {
+    Map<String, dynamic> firData2 = {
+      'userImage':
+          'https://firebasestorage.googleapis.com/v0/b/ecrime-16037.appspot.com/o/Firs%2Frh6768%2F423284122905777efb3a4618a2536a4855ecb5a.png?alt=media&token=8f9576f4-cfe0-4132-8c14-8608a75d1ee9',
+      'firNumber': '456',
+      'timestamp': DateTime.now(),
+      'description': 'Another FIR description goes here.',
+      'videoUrls': [
+        'https://firebasestorage.googleapis.com/v0/b/ecrime-16037.appspot.com/o/Firs%2Fmoazzamali0304%2F%D9%86%D8%B5%DB%8C%D8%A8%2B%D9%88%D8%A7%D9%84%D9%88%DA%BA%2B%D9%85%DB%8C%DA%BA%2B%D9%85%DB%8C%D8%B1%D8%A7%2B%D9%86%D8%A7%D9%85%2B%DB%81%D9%88%2B%D8%AC%D8%A7%D8%A6%DB%92Viral%2BVideo%2B1%2Bmillion%2Bviews%2B%2B%2BSand%2BStars%2Bfour%2Bsupport%2Bus%2B-%E2%9D%A4%2B%2B%2B%EF%B8%8F%2B%2B%2B............%23DawateIslamYT%23reels%2BInstagram%2B%23reels2023%23reelsvideo%2B%23reelsviral%2B%23reelschallenge%2B%23islamicquotes%2B%23naat%23naa.mp4?alt=media&token=0315e387-eaf4-40aa-b3bc-aae0077880ba',
+      ],
+      'pictureUrls': [
+        'https://firebasestorage.googleapis.com/v0/b/ecrime-16037.appspot.com/o/Firs%2Frh6768%2F423284122905777efb3a4618a2536a4855ecb5a.png?alt=media&token=8f9576f4-cfe0-4132-8c14-8608a75d1ee9',
+      ],
+      'pdfUrls': [
+        'https://firebasestorage.googleapis.com/v0/b/ecrime-16037.appspot.com/o/Firs%2Fmoazzamali0304%2F1699742695827735%2F2387193Devotion%20Product%20Specification.pdf?alt=media&token=4a5e93c1-6dcb-47c7-a4b8-a3550b518519',
+      ],
+    };
 
-  List<Widget> _buildFileWidgets(QueryDocumentSnapshot firSnapshot, context) {
-    List<Widget> fileWidgets = [];
+    String formattedTimestamp =
+        DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
 
-    List<String> videoUrls = List.from(firSnapshot['videoUrls']);
-    List<String> pictureUrls = List.from(firSnapshot['pictureUrls']);
-    List<String> pdfUrls = List.from(firSnapshot['pdfUrls']);
-
-    fileWidgets.addAll(_buildVideoWidgets(videoUrls));
-    fileWidgets.addAll(_buildPictureWidgets(pictureUrls));
-    fileWidgets.addAll(_buildPDFWidgets(pdfUrls, context));
-
-    return fileWidgets;
-  }
-
-  List<Widget> _buildVideoWidgets(List<String> videoUrls) {
-    List<Widget> videoWidgets = [];
-
-    for (String url in videoUrls) {
-      VideoPlayerController videoPlayerController =
-          VideoPlayerController.network(url);
-      ChewieController chewieController = ChewieController(
-        videoPlayerController: videoPlayerController,
-        aspectRatio: 16 / 9,
-        autoPlay: false,
-        looping: false,
-      );
-
-      videoWidgets.add(
-        Chewie(
-          controller: chewieController,
-        ),
-      );
-    }
-
-    return videoWidgets;
-  }
-
-  List<Widget> _buildPictureWidgets(List<String> pictureUrls) {
-    return pictureUrls.map((url) {
-      return Image.network(url);
-    }).toList();
-  }
-
-  List<Widget> _buildPDFWidgets(List<String> pdfUrls, context) {
-    return pdfUrls.map((url) {
-      return ElevatedButton(
-        onPressed: () async {
-          PDFDocument document = await PDFDocument.fromURL(url);
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PDFViewer(document: document),
-            ),
-          );
-        },
-        child: const Text('Open PDF'),
-      );
-    }).toList();
+    await firs.add({
+      ...firData2,
+      'timestamp': formattedTimestamp,
+    });
+    print("data added");
   }
 }

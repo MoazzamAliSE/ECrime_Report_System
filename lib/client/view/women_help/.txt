@@ -133,3 +133,29 @@ Phone: 042-99268281-2
 
 for PUNJAB COMMISSION ON THE STATUS OF WOMEN
 The Punjab Commission on the Status of Women (PCSW) is a statutory body established in February 2014 for promotion of women rights. After the devolution of women development to the provinces under the 18th amendment to the Constitution of Pakistan, PCSW was conceived as an oversight body to ensure policies and programs of the government promote gender equality in Punjab. A major objective of PCSW is the elimination of all forms of discrimination against women. For further details, please visit.
+
+
+
+
+I want that this is not the right according to me I need that there the name of the page should be View complains in this in the page there are two graphs , one for complain of corruptions and one for compains of service and respective buttons for complain of corruption and complain of service
+the graph show number of complains according to the type.
+
+there is a variable name isComplainService is there which is use for the comparison to show the content in the page
+
+Design of the pages are same so I can only string to compare and show the things according to that as both the pages are same 
+
+when i enter in the complain of service page or complain of corruption page
+
+the list tiles should be shown there to indicate who has complaint 
+as a user can complain about too many things 
+when i click on the list tile of a user ... all the complains of him shown there in an order with respect to time
+each complain will be in a card
+tha card design is as follow
+in a column the 
+corruption type in text
+institute name
+region name
+description of complain
+
+
+

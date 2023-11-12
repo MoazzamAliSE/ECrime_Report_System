@@ -5,7 +5,7 @@ import '../../../widgets/widgets_barrel.dart';
 
 class PhoneNumberField extends StatelessWidget {
   PhoneNumberField({super.key});
-  final controller=Get.put(SignUpController());
+  final controller = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
     return GenericTextField(

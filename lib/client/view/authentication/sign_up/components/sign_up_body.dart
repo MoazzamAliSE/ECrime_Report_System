@@ -10,8 +10,8 @@ import 'confirm_password_field.dart';
 
 class SignUpBody extends StatelessWidget {
   SignUpBody({super.key});
-  final controller=Get.put(SignUpController());
-  final _formKey=GlobalKey<FormState>();
+  final controller = Get.put(SignUpController());
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return BackgroundFrame(
@@ -28,7 +28,7 @@ class SignUpBody extends StatelessWidget {
                     const Text(
                       'Sign Up',
                       style:
-                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 40),
                     SignupNameField(),
@@ -52,7 +52,6 @@ class SignUpBody extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );
