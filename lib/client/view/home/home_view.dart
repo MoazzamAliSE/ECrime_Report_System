@@ -1,10 +1,15 @@
 import 'package:ecrime/client/utils/utils.dart';
 import 'package:ecrime/client/view/complain_corruption/complain_corruption.dart';
+import 'package:ecrime/client/view/status/status_view.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:get/get.dart';
 
 import '../../view model/controller/home controller/home_controller.dart';
+
+//to use globally
+var complainCorruption = 'corruption';
+var complainService = 'service';
 
 class HomeScreenClient extends StatelessWidget {
   final controller = Get.put(HomeController());
@@ -87,7 +92,7 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Status of FIR',
                     onTap: () {
-                      Navigator.pop(context);
+                      Get.off(const StatusPage()); //test
                     },
                   ),
                 ),
@@ -109,9 +114,6 @@ class HomeScreenClient extends StatelessWidget {
   }
 
   void regComplainDialog(BuildContext context) {
-    var complainCorruption = 'corruption';
-    var complainService = 'service';
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -127,12 +129,7 @@ class HomeScreenClient extends StatelessWidget {
                   svgIcon: regFir,
                   text: 'Complain for Curruption',
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ComplainPage(complainType: complainCorruption),
-                        ));
+                    Get.off(ComplainPage(complainType: complainCorruption));
 
                     // Navigator.pop(context);
                   },
@@ -141,12 +138,7 @@ class HomeScreenClient extends StatelessWidget {
                   svgIcon: regFir,
                   text: 'Complain for Services',
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ComplainPage(complainType: complainService),
-                        ));
+                    Get.off(ComplainPage(complainType: complainService));
                   },
                 ),
               ],

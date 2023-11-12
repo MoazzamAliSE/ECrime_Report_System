@@ -19,13 +19,20 @@ class MyClientApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  // variable for admin or client
+    // variable for admin or client
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.pages(), // client side
       theme: ThemeData(
         useMaterial3: true,
         appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+              fontFamily: interExtraBold,
+              color: AppColor.backgroundColor,
+              letterSpacing: 1,
+              fontSize: 22,
+              wordSpacing: 10),
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: AppColor.primaryColor,
         ),
       ),

@@ -13,7 +13,12 @@ BoxDecoration foregrounBoxDecoration = BoxDecoration(
     topRight: Radius.circular(backgroundRadius),
   ),
 );
-
+TextStyle appBarTextStyle = TextStyle(
+    fontFamily: interExtraBold,
+    color: AppColor.backgroundColor,
+    letterSpacing: 1,
+    fontSize: 22,
+    wordSpacing: 10);
 //fontFamily
 String interBold = "InterB";
 String interRegular = "InterR";

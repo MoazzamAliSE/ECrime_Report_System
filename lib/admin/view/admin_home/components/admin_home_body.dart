@@ -1,3 +1,4 @@
+import 'package:ecrime/admin/view/suggestions/suggestion_admin.dart';
 import 'package:ecrime/admin/view/view_admin_barrel.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class HomeScreenAdminBody extends StatelessWidget {
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
         ),
-        itemCount: 5, // Number of buttons
+        itemCount: 6, // Number of buttons
         itemBuilder: (context, index) {
           return Material(
             child: InkWell(
@@ -32,7 +33,7 @@ class HomeScreenAdminBody extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ViewComplaintsPage()),
+                          builder: (context) => const ViewComplaintsPage()),
                     );
                     break;
                   case 2:
@@ -54,6 +55,13 @@ class HomeScreenAdminBody extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const AssignFIRPage()),
+                    );
+                    break;
+                  case 5:
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SuggestionAdmin()),
                     );
                     break;
                 }
@@ -123,6 +131,15 @@ class HomeScreenAdminBody extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         );
+      case 5:
+        return const LinearGradient(
+          colors: [
+            Color.fromARGB(255, 150, 135, 0),
+            Color.fromARGB(255, 255, 255, 53)
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
       default:
         return const LinearGradient(
           colors: [Colors.grey, Colors.grey],
@@ -144,6 +161,8 @@ class HomeScreenAdminBody extends StatelessWidget {
         return Icons.assignment_turned_in_outlined;
       case 4:
         return Icons.assignment_ind_outlined;
+      case 5:
+        return Icons.lightbulb;
       default:
         return Icons.error_outline;
     }
@@ -161,6 +180,8 @@ class HomeScreenAdminBody extends StatelessWidget {
         return 'Manage FIR Status';
       case 4:
         return 'Assign FIR';
+      case 5:
+        return 'Suggestions';
       default:
         return 'Unknown';
     }

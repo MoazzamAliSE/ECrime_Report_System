@@ -1,4 +1,6 @@
+import 'package:ecrime/admin/view/authentication/login_admin/login_admin.dart';
 import 'package:ecrime/admin/view/view_admin_barrel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AdminHomePage extends StatelessWidget {
   const AdminHomePage({
@@ -11,10 +13,49 @@ class AdminHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Admin Home Page'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                _showLogoutConfirmationDialog(context);
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
       body: BackgroundFrame(
         child: const HomeScreenAdminBody(),
       ),
+    );
+  }
+
+  Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout Confirmation'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                // Navigate to your login or home screen
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const LoginPageAdmin()),
+                );
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

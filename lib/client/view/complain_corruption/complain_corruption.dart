@@ -23,13 +23,15 @@ class _ComplainPageState extends State<ComplainPage> {
     'Azad Jammu and Kashmir'
   ];
   List<String> institutesList = ['Police', 'Education', 'Other'];
-  final controller=Get.put(ComplainController());
+  final controller = Get.put(ComplainController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Complaint for Corruption'),
+        title: Text(widget.complainType == complainService
+            ? 'Complaint for Service'
+            : 'Complaint for Corruption'),
       ),
       body: BackgroundFrame(
         child: Padding(
@@ -37,9 +39,11 @@ class _ComplainPageState extends State<ComplainPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Report Corruption',
-                style: TextStyle(
+              Text(
+                widget.complainType == complainService
+                    ? 'Report Service'
+                    : 'Report Corruption',
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -48,11 +52,18 @@ class _ComplainPageState extends State<ComplainPage> {
               const Text(
                 'Submit your complaint below:',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18, // You can adjust the size as needed
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Select Institute:'),
+              const Text(
+                'Select Institute:',
+                style: TextStyle(
+                  fontSize: 18, // You can adjust the size as needed
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 10),
               _buildDropdown(
                 'Select Institute',
@@ -60,7 +71,13 @@ class _ComplainPageState extends State<ComplainPage> {
                 (value) => controller.institute.value = value!,
               ),
               const SizedBox(height: 20),
-              const Text('Region'),
+              const Text(
+                'Region',
+                style: TextStyle(
+                  fontSize: 18, // You can adjust the size as needed
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 10),
               _buildDropdown(
                 'Region',
@@ -68,28 +85,49 @@ class _ComplainPageState extends State<ComplainPage> {
                 (value) => controller.region.value = value!,
               ),
               const SizedBox(height: 10),
-              const Text('Enter Details:'),
+              const Text(
+                'Enter Details:',
+                style: TextStyle(
+                  fontSize: 18, // You can adjust the size as needed
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 10),
               GenericTextField(
-                hintText: 'Enter details about corruption...',
+                hintText: widget.complainType == complainService
+                    ? 'Enter details about service...'
+                    : 'Enter details about corruption...',
                 maxLines: 4,
                 minLines: 4,
                 controller: controller.detail,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  controller.picEvidence();
-                },
-                child: Obx(() => controller.evidenceName.isEmpty?const Text('Upload Document/Picture/Video'): Text(controller.evidenceName.value))
-              ),
+                  onPressed: () {
+                    controller.picEvidence();
+                  },
+                  child: Obx(() => controller.evidenceName.isEmpty
+                      ? const Text('Upload Document/Picture/Video')
+                      : Text(controller.evidenceName.value))),
               const SizedBox(height: 20),
               SizedBox(
                 width: 120,
                 height: 45,
                 child: ElevatedButton(
-                  onPressed: controller.loading.value? null:() => controller.registerComplain(widget.complainType),
-                  child: Obx(() => controller.loading.value?Center(child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(color: AppColor.primaryColor,),),) :const Text('Submit Complaint')),
+                  onPressed: controller.loading.value
+                      ? null
+                      : () => controller.registerComplain(widget.complainType),
+                  child: Obx(() => controller.loading.value
+                      ? Center(
+                          child: SizedBox(
+                            height: 15,
+                            width: 15,
+                            child: CircularProgressIndicator(
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
+                        )
+                      : const Text('Submit Complaint')),
                 ),
               ),
             ],
@@ -98,6 +136,7 @@ class _ComplainPageState extends State<ComplainPage> {
       ),
     );
   }
+
   Widget _buildDropdown(
       String labelText, List<String> items, Function(String?) onChanged) {
     return DropdownButtonFormField<String>(

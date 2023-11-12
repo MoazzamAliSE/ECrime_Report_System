@@ -18,7 +18,7 @@ class _AddPoliceStationPageState extends State<AddPoliceStationPage> {
   final TextEditingController locationController = TextEditingController();
   final TextEditingController districtController = TextEditingController();
 
-  bool loading=false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,75 +31,91 @@ class _AddPoliceStationPageState extends State<AddPoliceStationPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: nameController,
-              decoration:
-                  const InputDecoration(labelText: 'Police Station Name'),
-            ),
+            GenericTextField(
+                controller: nameController,
+                // decoration:
+                // const InputDecoration(
+                labelText: 'Police Station Name'
+                // ),
+                ),
             const SizedBox(height: 10),
-            TextField(
-              controller: locationController,
-              decoration: const InputDecoration(labelText: 'Location'),
-            ),
+            GenericTextField(
+                controller: locationController,
+
+                // decoration: const InputDecoration(
+                labelText: 'Location'
+                // ),
+                ),
             const SizedBox(height: 10),
-            TextField(
-              controller: districtController,
-              decoration: const InputDecoration(labelText: 'District'),
-            ),
+            GenericTextField(
+                controller: districtController,
+
+                // decoration: const InputDecoration(
+                labelText: 'District'
+                // ),
+                ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-
-                if(nameController.value.text.toString().isEmpty || locationController.value.text.toString().isEmpty || districtController.value.text.toString().isEmpty){
-                  Utils.showSnackBar('Warning', 'Please fill data correctly', Icon(Icons.warning_amber));
+                if (nameController.value.text.toString().isEmpty ||
+                    locationController.value.text.toString().isEmpty ||
+                    districtController.value.text.toString().isEmpty) {
+                  Utils.showSnackBar('Warning', 'Please fill data correctly',
+                      const Icon(Icons.warning_amber));
                   return;
                 }
 
                 setState(() {
-                  loading=true;
+                  loading = true;
                 });
-                FirebaseDatabase.instance.ref('PoliceStations').child(DateTime.now().microsecondsSinceEpoch.toString()).set({
-                  'name' : nameController.value.text.toString(),
-                  'location' : locationController.value.text.toString(),
-                  'district' : districtController.value.text.toString(),
+                FirebaseDatabase.instance
+                    .ref('PoliceStations')
+                    .child(DateTime.now().microsecondsSinceEpoch.toString())
+                    .set({
+                  'name': nameController.value.text.toString(),
+                  'location': locationController.value.text.toString(),
+                  'district': districtController.value.text.toString(),
                 }).then((value) {
                   setState(() {
-                    loading=false;
+                    loading = false;
                   });
                   Get.back();
-                  Utils.showSnackBar('Success', 'Successfully added police station', Icon(Icons.done_all));
+                  Utils.showSnackBar(
+                      'Success',
+                      'Successfully added police station',
+                      const Icon(Icons.done_all));
                 }).onError((error, stackTrace) {
                   setState(() {
-                    Utils.showSnackBar('Warning', 'Something went wrong', Icon(Icons.warning_amber));
-                    loading=false;
+                    Utils.showSnackBar('Warning', 'Something went wrong',
+                        const Icon(Icons.warning_amber));
+                    loading = false;
                   });
                 });
-
-
-
               },
-              child: loading ? Center(child: SizedBox(
-                height: 15,
-                width: 15,
-                child: CircularProgressIndicator(
-                  color: AppColor.primaryColor,
-                ),
-              ),) :const Text('Add Police Station'),
+              child: loading
+                  ? Center(
+                      child: SizedBox(
+                        height: 15,
+                        width: 15,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColor.primaryColor,
+                          ),
+                        ),
+                      ),
+                    )
+                  : const Text('Add Police Station'),
             ),
-
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: (){
-                Get.to(AllStations());
+              onPressed: () {
+                Get.to(const AllStations());
               },
-              child:const Text('See all police stations'),
+              child: const Text('See all police stations'),
             ),
-
-
           ],
         ),
       ),
     );
   }
 }
-

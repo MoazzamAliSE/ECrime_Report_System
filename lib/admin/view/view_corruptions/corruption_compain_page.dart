@@ -19,25 +19,29 @@ class CorruptionComplainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Corruption Complaints'),
-          ),
-          body: FirebaseAnimatedList(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            query: FirebaseDatabase.instance.ref('Complains').child(type),
-            itemBuilder: (context, snapshot, animation, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: GestureDetector(
-                  onTap: () => Get.to(ComplainList(
-                      type: type, email: snapshot.child('email').value.toString())),
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
+      appBar: AppBar(
+        title: const Text('Corruption Complaints'),
+      ),
+      body: BackgroundFrame(
+        child: FirebaseAnimatedList(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          query: FirebaseDatabase.instance.ref('Complains').child(type),
+          itemBuilder: (context, snapshot, animation, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: InkWell(
+                onTap: () => Get.to(ComplainList(
+                    type: type,
+                    email: snapshot.child('email').value.toString())),
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
                         CachedNetworkImage(
                           imageUrl:
-                          snapshot.child('profilePicture').value.toString(),
+                              snapshot.child('profilePicture').value.toString(),
                           imageBuilder: (context, imageProvider) {
                             return CircleAvatar(
                               radius: 25,
@@ -49,14 +53,16 @@ class CorruptionComplainPage extends StatelessWidget {
                               child: SizedBox(
                                 height: 15,
                                 width: 15,
-                                child: CircularProgressIndicator(
-                                  color: AppColor.primaryColor,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColor.primaryColor,
+                                  ),
                                 ),
                               ),
                             );
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Column(
@@ -64,13 +70,13 @@ class CorruptionComplainPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${snapshot.child('email').value.toString()}',
-                              style:
-                              TextStyle(fontWeight: FontWeight.bold, height: 0),
+                              snapshot.child('email').value.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, height: 0),
                             ),
                             Text(
-                              '${snapshot.child('name').value.toString()}',
-                              style: TextStyle(height: 0),
+                              snapshot.child('name').value.toString(),
+                              style: const TextStyle(height: 0),
                             ),
                           ],
                         )
@@ -78,9 +84,11 @@ class CorruptionComplainPage extends StatelessWidget {
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-        ));
+              ),
+            );
+          },
+        ),
+      ),
+    ));
   }
 }

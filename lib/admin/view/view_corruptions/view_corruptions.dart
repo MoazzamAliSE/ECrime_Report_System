@@ -1,11 +1,11 @@
-
+import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 
 import '../../../constants.dart';
-import 'curroption_compain_page.dart';
+import 'corruption_compain_page.dart';
 
 class ViewComplaintsPage extends StatefulWidget {
   const ViewComplaintsPage({Key? key}) : super(key: key);
@@ -24,45 +24,100 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
       appBar: AppBar(
         title: const Text('View Complaints'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              // setState(() {
-              //   isComplainService = false;
-              //   isDataLoaded = false;
-              // });
-
-              Get.to(const CorruptionComplainPage(
-                type: 'corruption',
-              ));
-            },
-            child: const Text('Complaints of Corruption'),
+      body: BackgroundFrame(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Material(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(const CorruptionComplainPage(
+                              type: 'corruption',
+                            ));
+                          },
+                          child: Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.warning,
+                                    color: Colors.white, size: 40),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Complaints of\nCorruption',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight:
+                                        FontWeight.bold, // Make text bold
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(const CorruptionComplainPage(
+                              type: 'service',
+                            ));
+                          },
+                          child: Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.report,
+                                    color: Colors.white, size: 40),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Complaints of\nService',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight:
+                                        FontWeight.bold, // Make text bold
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              isDataLoaded ? _buildPieChart() : Container(),
+              isDataLoaded ? _buildUserListTiles() : Container(),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              // setState(() {
-              //   isComplainService = true;
-              //   isDataLoaded = false;
-              // });
-              Get.to(const CorruptionComplainPage(
-                type: 'service',
-              ));
-            },
-            child: const Text('Complaints of Service'),
-          ),
-          // Display the appropriate pie chart based on isComplainService
-          isDataLoaded ? _buildPieChart() : Container(),
-          // Display list tiles for users who have lodged complaints
-          isDataLoaded ? _buildUserListTiles() : Container(),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildPieChart() {
-    // Placeholder data for demonstration purposes
     Map<String, int> data = isComplainService
         ? {'Resolved': 5, 'InProgress': 3, 'Rejected': 2}
         : {'Resolved': 3, 'InProgress': 1, 'Rejected': 2};
@@ -95,13 +150,11 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
   }
 
   Widget _buildUserListTiles() {
-    // Fetch the list of users who have lodged complaints
-    // For now, I'm assuming you have a Firestore collection 'users' that stores user information.
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection('users').snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
 
         List<QueryDocumentSnapshot> users = snapshot.data!.docs;
@@ -110,9 +163,7 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
           children: users
               .map((user) => ListTile(
                     title: Text(user['username']),
-                    // Assuming 'username' is a field in your 'users' collection
                     onTap: () {
-                      // Navigate to a new page showing all complaints from this user
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -148,8 +199,6 @@ class ComplaintsFromUserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch and display all complaints from the selected user
-    // Use the userId to filter complaints in Firestore
     return Scaffold(
       appBar: AppBar(
         title: const Text('Complaints from User'),
@@ -161,7 +210,7 @@ class ComplaintsFromUserPage extends StatelessWidget {
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
 
           List<QueryDocumentSnapshot> userComplaints = snapshot.data!.docs;
@@ -194,13 +243,8 @@ class ComplaintCard extends StatelessWidget {
           Text('Region Name: ${complaint['regionName']}'),
           Text('Status: ${complaint['status']}'),
           Text('Description: ${complaint['description']}'),
-          // Add more fields as needed
         ],
       ),
     );
   }
 }
-
-
-
-

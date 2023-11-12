@@ -22,11 +22,11 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
     // TODO: implement initState
     super.initState();
 
-    if(widget.snapshot.child('evidenceUrl').value.toString().contains('mp4')){
-      _controller = VideoPlayerController.networkUrl(Uri.parse(
-          widget.snapshot.child('evidenceUrl').value.toString()))
+    if (widget.snapshot.child('evidenceUrl').value.toString().contains('mp4')) {
+      _controller = VideoPlayerController.networkUrl(
+          Uri.parse(widget.snapshot.child('evidenceUrl').value.toString()))
         ..initialize().then((_) {
-                    setState(() {});
+          setState(() {});
         });
 
       _chewieController = ChewieController(
@@ -38,14 +38,9 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
         allowFullScreen: true,
         aspectRatio: 16 / 9,
       );
-
-
-
-
     }
-
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,56 +49,59 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
             'FIR Number ${widget.snapshot.child('key').value.toString().substring(0, 4)}'),
       ),
       body: BackgroundFrame(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  'Submitted by: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                const Text('Name of person who submit the fir'),
-                Row(
-                  children: [
-                    const Text(
-                      'Submitted at: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    Text(widget.snapshot
-                        .child('incidentDateTime')
-                        .value
-                        .toString()
-                        .substring(
-                            0,
-                            widget.snapshot
-                                .child('incidentDateTime')
-                                .value
-                                .toString()
-                                .indexOf(' -'))),
-                  ],
-                ),
-                const Text(
-                  'Description: ',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                Text(
-                    ' ${widget.snapshot.child('incidentDetails').value.toString()}'),
-                const SizedBox(height: 20),
-                const Text(
-                  'Files:',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                fileWidget(),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Assign FIR'),
-                ),
-              ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'Submitted by: ',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  Text(widget.snapshot.child('name').value.toString()),
+                  Row(
+                    children: [
+                      const Text(
+                        'Submitted at: ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      Text(widget.snapshot
+                          .child('incidentDateTime')
+                          .value
+                          .toString()
+                          .substring(
+                              0,
+                              widget.snapshot
+                                  .child('incidentDateTime')
+                                  .value
+                                  .toString()
+                                  .indexOf(' -'))),
+                    ],
+                  ),
+                  const Text(
+                    'Description: ',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  Text(
+                      ' ${widget.snapshot.child('incidentDetails').value.toString()}'),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Files:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const SizedBox(height: 10),
+                  fileWidget(),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Assign FIR'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -111,17 +109,21 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
     );
   }
 
-
-
   fileWidget() {
     String url = widget.snapshot.child('evidenceUrl').value.toString();
     if (url.contains('jpg') || url.contains('png') || url.contains('jpeg')) {
       return CachedNetworkImage(
         imageUrl: url,
-        placeholder: (context, url) => Padding(padding: EdgeInsets.all(50),
-        child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(
-          color: AppColor.primaryColor,
-        )),
+        placeholder: (context, url) => Padding(
+          padding: const EdgeInsets.all(50),
+          child: SizedBox(
+              height: 15,
+              width: 15,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.primaryColor,
+                ),
+              )),
         ),
         imageBuilder: (context, imageProvider) {
           return ClipRRect(
@@ -135,20 +137,21 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
     } else if (url.contains('mp4')) {
       _controller.play();
       return AspectRatio(
-          aspectRatio: 16/9,
+          aspectRatio: 16 / 9,
           child: Chewie(
             controller: _chewieController!,
           ));
     } else {
-      return TextButton(onPressed: () {
-        Get.to(PDFViewerView(url: url));
-      }, child: const Text('Evidence is a document. Tap for view'));
+      return TextButton(
+          onPressed: () {
+            Get.to(PDFViewerView(url: url));
+          },
+          child: const Text('Evidence is a document. Tap for view'));
     }
   }
 
   @override
   void dispose() {
-
     super.dispose();
   }
 }

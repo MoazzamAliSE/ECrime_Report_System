@@ -55,7 +55,13 @@ class _StatusPageState extends State<StatusPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text('Enter the Following details'),
+              const Text(
+                'Enter the Following details',
+                style: TextStyle(
+                  fontSize: 18, // You can adjust the size as needed
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 16.0),
               _buildDropdown('District', districtList, (value) {
                 setState(() {

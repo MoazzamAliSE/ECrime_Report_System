@@ -1,5 +1,7 @@
 import 'package:ecrime/admin/view/admin_home/admin_home.dart';
 import 'package:ecrime/admin/view/authentication/signup_admin/sign_up.dart';
+import 'package:ecrime/admin/view/view_admin_barrel.dart';
+import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:ecrime/client/widgets/generic_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,7 +44,7 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
           bool isAdmin = userSnapshot['isAdmin'] ?? false;
 
           if (isAdmin) {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const AdminHomePage()),
             );
@@ -100,23 +102,29 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Login'),
+        title: const Text(
+          'Admin Login',
+          // style: ,
+        ),
+        centerTitle: true,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildEmailField(),
-                const SizedBox(height: 10),
-                _buildPasswordField(),
-                const SizedBox(height: 20),
-                _buildLoginButton(),
-                const SizedBox(height: 10),
-                _buildSignUpButton(context),
-              ],
+      body: BackgroundFrame(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildEmailField(),
+                  const SizedBox(height: 10),
+                  _buildPasswordField(),
+                  const SizedBox(height: 20),
+                  _buildLoginButton(),
+                  const SizedBox(height: 10),
+                  _buildSignUpButton(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -145,7 +153,7 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
   ElevatedButton _buildLoginButton() {
     return ElevatedButton(
       onPressed: _loading ? null : _signIn,
-      child: _loading ? const CircularProgressIndicator() : const Text('Login'),
+      child: _loading ? Center(child: const CircularProgressIndicator()) : const Text('Login'),
     );
   }
 

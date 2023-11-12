@@ -23,45 +23,57 @@ class _ViewFIRsPageState extends State<ViewFIRsPage> {
         title: const Text('View FIRs'),
       ),
       body: BackgroundFrame(
-        child: FirebaseAnimatedList(query: FirebaseDatabase.instance.ref('Firs'), itemBuilder: (context, snapshot, animation, index) {
-          return GestureDetector(
-            onTap: () {
-              Get.to(FIRDetailPage(snapshot: snapshot));
-            },
-            child: SizedBox(
-              width: MediaQuery.sizeOf(context).width,
-              height: 70,
-              child: ListTile(
-                leading: CachedNetworkImage(imageUrl: snapshot.child('profileImage').value.toString(),
-                imageBuilder: (context, imageProvider) {
-                 return CircleAvatar(
-                    radius: 25,
-                   backgroundImage: imageProvider,
-                  );
-                },
-                  placeholder: (context, url) {
-                    return Center(
-                      child: SizedBox(
-                        height: 15,
-                        width: 15,
-                        child: CircularProgressIndicator(
-                          color: AppColor.primaryColor,
-                        ),
-                      ),
-                    );
-                  },
-
+          child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: FirebaseAnimatedList(
+          query: FirebaseDatabase.instance.ref('Firs'),
+          itemBuilder: (context, snapshot, animation, index) {
+            return GestureDetector(
+              onTap: () {
+                Get.to(FIRDetailPage(snapshot: snapshot));
+              },
+              child: SizedBox(
+                width: MediaQuery.sizeOf(context).width,
+                // width: 300,
+                height: 70,
+                child: ListTile(
+                  leading: SizedBox(
+                    width: 56,
+                    child: CachedNetworkImage(
+                      imageUrl: snapshot.child('profileImage').value.toString(),
+                      imageBuilder: (context, imageProvider) {
+                        return CircleAvatar(
+                          radius: 25,
+                          backgroundImage: imageProvider,
+                        );
+                      },
+                      placeholder: (context, url) {
+                        return Center(
+                          child: SizedBox(
+                            height: 15,
+                            width: 15,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: AppColor.primaryColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  title: Text(
+                    'FIR Number ${Random().nextInt(500)}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                      'Submitted at ${snapshot.child('incidentDateTime').value.toString().substring(0, snapshot.child('incidentDateTime').value.toString().indexOf(' -'))}'),
                 ),
-                title: Text('FIR Number ${Random().nextInt(500)}',style: TextStyle(
-                  fontWeight: FontWeight.bold
-                ),),
-                subtitle: Text('Submitted at ${snapshot.child('incidentDateTime').value.toString().substring(0,snapshot.child('incidentDateTime').value.toString().indexOf(' -'))}'),
               ),
-            ),
-          );
-        },)
-      ),
+            );
+          },
+        ),
+      )),
     );
   }
 }
-

@@ -1,36 +1,6 @@
+import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-class StatusFirScreenAdmin extends StatelessWidget {
-  const StatusFirScreenAdmin({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Home Page'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ManageFIRStatusPage()),
-                );
-              },
-              child: const Text('Manage FIR Status'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class ManageFIRStatusPage extends StatelessWidget {
   const ManageFIRStatusPage({super.key});
@@ -41,22 +11,24 @@ class ManageFIRStatusPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Manage FIR Status'),
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('firs').snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          }
+      body: BackgroundFrame(
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('firs').snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          List<QueryDocumentSnapshot> firs = snapshot.data!.docs;
+            List<QueryDocumentSnapshot> firs = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: firs.length,
-            itemBuilder: (context, index) {
-              return FIRStatusListItem(firSnapshot: firs[index]);
-            },
-          );
-        },
+            return ListView.builder(
+              itemCount: firs.length,
+              itemBuilder: (context, index) {
+                return FIRStatusListItem(firSnapshot: firs[index]);
+              },
+            );
+          },
+        ),
       ),
     );
   }

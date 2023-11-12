@@ -51,7 +51,7 @@ class _SignupPageAdminState extends State<SignupPageAdmin> {
           'userName': userName.toString(),
         });
 
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AdminHomePage()),
         );
