@@ -1,6 +1,8 @@
+import 'package:ecrime/client/view%20model/controller/complain_controller/complain_controller.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ComplainPage extends StatefulWidget {
   const ComplainPage({super.key, required this.complainType});
@@ -20,8 +22,8 @@ class _ComplainPageState extends State<ComplainPage> {
     'Gilgit-Baltistan',
     'Azad Jammu and Kashmir'
   ];
-
   List<String> institutesList = ['Police', 'Education', 'Other'];
+  final controller=Get.put(ComplainController());
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class _ComplainPageState extends State<ComplainPage> {
               _buildDropdown(
                 'Select Institute',
                 institutesList,
-                (value) => selectedInstitute = value!,
+                (value) => controller.institute.value = value!,
               ),
               const SizedBox(height: 20),
               const Text('Region'),
@@ -63,7 +65,7 @@ class _ComplainPageState extends State<ComplainPage> {
               _buildDropdown(
                 'Region',
                 pakistanProvinces,
-                (value) => selectedInstitute = value!,
+                (value) => controller.region.value = value!,
               ),
               const SizedBox(height: 10),
               const Text('Enter Details:'),
@@ -72,21 +74,23 @@ class _ComplainPageState extends State<ComplainPage> {
                 hintText: 'Enter details about corruption...',
                 maxLines: 4,
                 minLines: 4,
-                controller: null,
+                controller: controller.detail,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  print('Upload Document/Picture/Video');
+                  controller.picEvidence();
                 },
-                child: const Text('Upload Document/Picture/Video'),
+                child: Obx(() => controller.evidenceName.isEmpty?const Text('Upload Document/Picture/Video'): Text(controller.evidenceName.value))
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  print('Complaint Submitted!');
-                },
-                child: const Text('Submit Complaint'),
+              SizedBox(
+                width: 120,
+                height: 45,
+                child: ElevatedButton(
+                  onPressed: controller.loading.value? null:() => controller.registerComplain(widget.complainType),
+                  child: Obx(() => controller.loading.value?Center(child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(color: AppColor.primaryColor,),),) :const Text('Submit Complaint')),
+                ),
               ),
             ],
           ),
@@ -94,7 +98,6 @@ class _ComplainPageState extends State<ComplainPage> {
       ),
     );
   }
-
   Widget _buildDropdown(
       String labelText, List<String> items, Function(String?) onChanged) {
     return DropdownButtonFormField<String>(

@@ -8,6 +8,7 @@ class FIRModel {
   String? cnic;
   String? phoneNumber;
   String? address;
+  String? status='Pending';
   String? incidentDistrict;
   String? incidentAddress;
   DateTime incidentDateTime = DateTime.now();
@@ -21,6 +22,7 @@ class FIRModel {
     this.firType,
     this.fathersName,
     this.cnic,
+    this.status,
     this.address,
     this.incidentDistrict,
     this.incidentAddress,

@@ -1,6 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:get/get.dart';
+
+import '../../../constants.dart';
+import 'curroption_compain_page.dart';
 
 class ViewComplaintsPage extends StatefulWidget {
   const ViewComplaintsPage({Key? key}) : super(key: key);
@@ -24,19 +29,26 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
         children: [
           ElevatedButton(
             onPressed: () {
-              setState(() {
-                isComplainService = false;
-                isDataLoaded = false;
-              });
+              // setState(() {
+              //   isComplainService = false;
+              //   isDataLoaded = false;
+              // });
+
+              Get.to(const CorruptionComplainPage(
+                type: 'corruption',
+              ));
             },
             child: const Text('Complaints of Corruption'),
           ),
           ElevatedButton(
             onPressed: () {
-              setState(() {
-                isComplainService = true;
-                isDataLoaded = false;
-              });
+              // setState(() {
+              //   isComplainService = true;
+              //   isDataLoaded = false;
+              // });
+              Get.to(const CorruptionComplainPage(
+                type: 'service',
+              ));
             },
             child: const Text('Complaints of Service'),
           ),
@@ -44,12 +56,6 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
           isDataLoaded ? _buildPieChart() : Container(),
           // Display list tiles for users who have lodged complaints
           isDataLoaded ? _buildUserListTiles() : Container(),
-          ElevatedButton(
-            onPressed: () {
-              addDummyComplaints();
-            },
-            child: const Text('Add Dummy Data'),
-          ),
         ],
       ),
     );
@@ -103,8 +109,8 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
         return Column(
           children: users
               .map((user) => ListTile(
-                    title: Text(user[
-                        'username']), // Assuming 'username' is a field in your 'users' collection
+                    title: Text(user['username']),
+                    // Assuming 'username' is a field in your 'users' collection
                     onTap: () {
                       // Navigate to a new page showing all complaints from this user
                       Navigator.push(
@@ -131,58 +137,6 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
       Colors.purple
     ];
     return colors[status.hashCode % colors.length];
-  }
-
-  void addDummyComplaints() async {
-    // Add dummy users
-    DocumentReference johnDoeRef =
-        await FirebaseFirestore.instance.collection('users').add({
-      'username': 'JohnDoe',
-      'email': 'john.doe@example.com',
-    });
-
-    DocumentReference janeDoeRef =
-        await FirebaseFirestore.instance.collection('users').add({
-      'username': 'JaneDoe',
-      'email': 'jane.doe@example.com',
-    });
-
-    // Add dummy complaints
-    await FirebaseFirestore.instance.collection('complaints').add({
-      'userId': johnDoeRef.id,
-      'complaintType': isComplainService ? 'Service' : 'Corruption',
-      'instituteName': 'ABC Institute',
-      'regionName': 'City A',
-      'status': 'Resolved',
-      'description':
-          'This is a complaint about ${isComplainService ? 'service' : 'corruption'}.',
-    });
-
-    await FirebaseFirestore.instance.collection('complaints').add({
-      'userId': johnDoeRef.id,
-      'complaintType': isComplainService ? 'Service' : 'Corruption',
-      'instituteName': 'XYZ Corporation',
-      'regionName': 'City B',
-      'status': 'InProgress',
-      'description':
-          'This is a complaint about ${isComplainService ? 'service' : 'corruption'}.',
-    });
-
-    await FirebaseFirestore.instance.collection('complaints').add({
-      'userId': janeDoeRef.id,
-      'complaintType': isComplainService ? 'Service' : 'Corruption',
-      'instituteName': 'PQR Organization',
-      'regionName': 'City C',
-      'status': 'Rejected',
-      'description':
-          'This is a complaint about ${isComplainService ? 'service' : 'corruption'}.',
-    });
-
-    setState(() {
-      isDataLoaded = true;
-    });
-
-    print('Dummy data added');
   }
 }
 
@@ -247,75 +201,6 @@ class ComplaintCard extends StatelessWidget {
   }
 }
 
-void addDummyComplaints() async {
-  // Add dummy users
-  DocumentReference johnDoeRef =
-      await FirebaseFirestore.instance.collection('users').add({
-    'username': 'JohnDoe',
-    'email': 'john.doe@example.com',
-  });
 
-  DocumentReference janeDoeRef =
-      await FirebaseFirestore.instance.collection('users').add({
-    'username': 'JaneDoe',
-    'email': 'jane.doe@example.com',
-  });
 
-  // Add dummy corruption complaints
-  await FirebaseFirestore.instance.collection('complaints').add({
-    'userId': johnDoeRef.id,
-    'complaintType': 'Corruption',
-    'instituteName': 'ABC Institute',
-    'regionName': 'City A',
-    'status': 'Resolved',
-    'description': 'This is a complaint about corruption.',
-  });
 
-  await FirebaseFirestore.instance.collection('complaints').add({
-    'userId': johnDoeRef.id,
-    'complaintType': 'Corruption',
-    'instituteName': 'XYZ Corporation',
-    'regionName': 'City B',
-    'status': 'InProgress',
-    'description': 'This is a complaint about corruption.',
-  });
-
-  await FirebaseFirestore.instance.collection('complaints').add({
-    'userId': janeDoeRef.id,
-    'complaintType': 'Corruption',
-    'instituteName': 'PQR Organization',
-    'regionName': 'City C',
-    'status': 'Rejected',
-    'description': 'This is a complaint about corruption.',
-  });
-
-  // Add dummy service complaints
-  await FirebaseFirestore.instance.collection('complaints').add({
-    'userId': johnDoeRef.id,
-    'complaintType': 'Service',
-    'instituteName': 'ABC Service Provider',
-    'regionName': 'City A',
-    'status': 'Resolved',
-    'description': 'This is a complaint about service.',
-  });
-
-  await FirebaseFirestore.instance.collection('complaints').add({
-    'userId': johnDoeRef.id,
-    'complaintType': 'Service',
-    'instituteName': 'XYZ Service Company',
-    'regionName': 'City B',
-    'status': 'InProgress',
-    'description': 'This is a complaint about service.',
-  });
-
-  await FirebaseFirestore.instance.collection('complaints').add({
-    'userId': janeDoeRef.id,
-    'complaintType': 'Service',
-    'instituteName': 'PQR Service Organization',
-    'regionName': 'City C',
-    'status': 'Rejected',
-    'description': 'This is a complaint about service.',
-  });
-
-  print('Dummy data added');
-}

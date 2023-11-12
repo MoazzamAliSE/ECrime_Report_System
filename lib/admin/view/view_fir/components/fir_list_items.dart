@@ -14,12 +14,7 @@ class FIRListItem extends StatelessWidget {
       title: Text('FIR Number ${firSnapshot['firNumber']}'),
       subtitle: Text('Submitted at ${firSnapshot['timestamp']}'),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FIRDetailPage(firSnapshot: firSnapshot),
-          ),
-        );
+
       },
     );
   }

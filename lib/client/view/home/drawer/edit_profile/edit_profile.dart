@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecrime/client/View/widgets/widgets_barrel.dart';
+import 'package:ecrime/client/view%20model/controller/editProfile_controller/editProfileController.dart';
+import 'package:get/get.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -8,39 +11,11 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _phoneNoController = TextEditingController();
-  File? _profilePic;
-  final String _email = '';
-  final String _fullName = '';
-  final String _userName = '';
-  final String _phoneNo = '';
-  late User _user;
+ final controller=Get.put(EditProfileController());
+
   @override
   void initState() {
     super.initState();
-
-    _user = FirebaseAuth.instance.currentUser!;
-    _fetchUserDetails();
-  }
-
-  Future<void> _fetchUserDetails() async {
-    _emailController.text = _user.email ?? '';
-    _fullNameController.text = _user.displayName ?? '';
-    _usernameController.text = _user.displayName ?? '';
-  }
-
-  Future _pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        _profilePic = File(pickedFile.path);
-      });
-    }
   }
 
   @override
@@ -66,15 +41,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
-                                _pickImage(ImageSource.gallery);
                               },
                               child: const Text('Gallery'),
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
-                                _pickImage(ImageSource.camera);
+
+
                               },
                               child: const Text('Camera'),
                             ),
@@ -83,21 +56,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       },
                     );
                   },
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: _profilePic != null
-                        ? FileImage(_profilePic!)
-                        : _user.photoURL != null
-                            ? NetworkImage(_user.photoURL!)
-                            : null as ImageProvider<Object>?,
-                    child: _profilePic == null && _user.photoURL == null
-                        ? const Icon(
-                            Icons.camera_alt,
-                            size: 40,
-                            color: Colors.white,
-                          )
-                        : null,
-                  ),
+                  child: Obx(() => controller.profileImage.value.isEmpty? Center(child: Icon(Icons.camera_alt_outlined),) :CachedNetworkImage(imageUrl: controller.profileImage.value,
+                      imageBuilder: (context, imageProvider) => CircleAvatar(
+                        radius: 50,
+                        backgroundImage: imageProvider,
+                      ),
+                      placeholder: (context, url) => Obx(() =>controller.profileImage.isEmpty? CircleAvatar(
+                        radius: 50,
+                        child: Center(
+                          child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(
+                            color: AppColor.primaryColor,
+                          ),),
+                        ),
+                      ):Container(),)
+                  ))
                 ),
               ),
               const SizedBox(height: 20),
@@ -105,17 +77,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 'Edit Email:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              GenericTextField(
-                controller: _emailController,
+              Obx(() => GenericTextField(
+                controller: controller.emailController.value,
                 hintText: 'Enter your new email',
-              ),
+              ),),
+
               const SizedBox(height: 20),
               const Text(
                 'Edit Full Name:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               GenericTextField(
-                controller: _fullNameController,
+                controller: controller.fullNameController.value,
                 hintText: 'Enter your new full name',
               ),
               const SizedBox(height: 20),
@@ -124,7 +97,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               GenericTextField(
-                controller: _usernameController,
+                controller: controller.usernameController.value,
                 hintText: 'Enter your new username',
               ),
               const SizedBox(height: 20),
@@ -133,16 +106,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               GenericTextField(
-                controller: _phoneNoController,
+                controller: controller.usernameController.value,
                 keyboardType: TextInputType.phone,
                 hintText: 'Enter your new phone number',
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Changes saved successfully!'),
-                  ));
+                  controller.upDateData();
                 },
                 child: const Text('Save Changes'),
               ),
@@ -151,18 +122,5 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ),
     );
-  }
-
-  Future<void> _saveChanges() async {
-    try {
-      if (_profilePic != null) {}
-
-      await _user.updateDisplayName(_usernameController.text);
-
-      await _user.reload();
-      _user = FirebaseAuth.instance.currentUser!;
-    } catch (e) {
-      print('Error updating user details: $e');
-    }
   }
 }

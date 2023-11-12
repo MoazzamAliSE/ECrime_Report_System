@@ -4,6 +4,8 @@ import 'package:ecrime/client/data/user%20pref/user_pref.dart';
 import 'package:ecrime/client/res/routes/routes_name.dart';
 import 'package:ecrime/client/utils/utils.dart';
 import 'package:ecrime/client/view%20model/controller/authentication_controller/signUp_controller.dart';
+import 'package:ecrime/client/view%20model/controller/complain_controller/complain_controller.dart';
+import 'package:ecrime/client/view%20model/controller/editProfile_controller/editProfileController.dart';
 import 'package:ecrime/client/view%20model/controller/register%20fir/register_fir_controller.dart';
 import 'package:ecrime/client/view/investigation_update/investigation_update.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -84,7 +86,6 @@ class FirebaseServices {
           const Icon(Icons.warning_amber));
     });
   }
-
   // Login Account and get data from live db and store it in shared pref
   static Future<void> signInAccount() async {
     final signInController = Get.put(SignInController());
@@ -129,23 +130,32 @@ class FirebaseServices {
           const Icon(Icons.warning_amber));
     });
   }
-
   // Create Fir in Db with both evidence or just data
   static Future<void> uploadFireData(String key, String evidenceUrl) async {
     final registerFirController = Get.put(RegisterFirController());
     registerFirController.loading.value = true;
     String email = (await UserPref.getUser())['email']!;
+
+    // FirebaseDatabase.instance
+    //     .ref('Firs')
+    //     .child(email.substring(0, email.indexOf('@'))).set({
+    //   'email' : email,
+    //   'name' : (await UserPref.getUser())['userName'],
+    //   'profilePicture' : (await UserPref.getUser())['profilePicture'],
+    // });
+
     FirebaseDatabase.instance
         .ref('Firs')
-        .child(email.substring(0, email.indexOf('@')))
         .child(key)
         .set({
       'key': key,
       'evidenceUrl': evidenceUrl,
+      'profileImage' : (await UserPref.getUser())['profilePicture'],
       'victimType': registerFirController.fireType.value,
       'fireType': registerFirController.model.value.firType,
       'cinc': registerFirController.model.value.cnic,
       'name': registerFirController.model.value.name,
+      'status' : registerFirController.model.value.status,
       'phoneNumber': registerFirController.model.value.phoneNumber,
       'address': registerFirController.model.value.address,
       'fatherName': registerFirController.model.value.fathersName,
@@ -160,6 +170,9 @@ class FirebaseServices {
       Utils.showSnackBar(
           'Success', 'Your fir is registered', const Icon(Icons.done_all));
       registerFirController.loading.value = false;
+      registerFirController.stepper.value=0;
+      registerFirController.fileName.value='';
+      registerFirController.evidenceType.value='';
       Get.offAllNamed(RoutesName.home);
     }).onError((error, stackTrace) {
       Utils.showSnackBar('Error', 'Something went wrong try again',
@@ -167,6 +180,7 @@ class FirebaseServices {
       registerFirController.loading.value = false;
     });
   }
+
 
   static Future<void> registerFir() async {
     final registerFirController = Get.put(RegisterFirController());
@@ -194,4 +208,103 @@ class FirebaseServices {
           registerFirController.loading.value = false;
         });
   }
+
+  static Future<void> registerComplain(String type)async {
+    final controlller=Get.put(ComplainController());
+    controlller.loading.value=true;
+    FirebaseStorage storage = FirebaseStorage.instance;
+    String email = (await UserPref.getUser())['email']!;
+    String key = DateTime.now().microsecondsSinceEpoch.toString();
+    var sRef = storage.ref(
+        'Complains/${email.substring(0, email.indexOf('@'))}/$type/$key/${Random().nextInt(10000000).toString() + controlller.evidenceName.value}');
+    var uploadTask = sRef.putFile(File(controlller.evidence.value));
+    await Future.value(uploadTask)
+        .then((v) async {
+      sRef.getDownloadURL().then((url) async {
+        String email = (await UserPref.getUser())['email']!;
+
+        FirebaseDatabase.instance
+            .ref('Complains').child(type)
+            .child(email.substring(0, email.indexOf('@'))).set({
+          'email' : email,
+          'name' : (await UserPref.getUser())['userName'],
+          'profilePicture' : (await UserPref.getUser())['profilePicture'],
+        });
+
+
+
+
+        FirebaseDatabase.instance
+            .ref('Complains').child(type)
+            .child(email.substring(0, email.indexOf('@'))).child('Complains')
+            .child(key)
+            .set({
+        'key': key,
+          'complainerEmail' : email,
+          'complainerName':  (await UserPref.getUser())['userName'],
+        'evidenceUrl': url,
+          'status' : 'Pending',
+          'institute':controlller.institute.value,
+          'region' : controlller.region.value,
+          'details' : controlller.detail.value.text.toString(),
+        'incidentDateTime': DateFormat('MMMM d, y - hh:mm a')
+            .format(DateTime.now()),
+        }).then((value) {
+        Utils.showSnackBar(
+        'Success', 'Your complain is registered', const Icon(Icons.done_all));
+        controlller.loading.value = false;
+        controlller.detail.clear();
+        controlller.evidenceName.value='';
+        controlller.evidence.value='';
+        }).onError((error, stackTrace) {
+        Utils.showSnackBar('Error', 'Something went wrong try again',
+        const Icon(Icons.warning_amber));
+        controlller.loading.value = false;
+        });
+      });
+    })
+        .then((value) {})
+        .onError((error, stackTrace) {
+      Utils.showSnackBar('Error', 'Something went wrong try again',
+          const Icon(Icons.warning_amber));
+      controlller.loading.value = false;
+    });
+  }
+
+
+  static Future<void> updateProfile(String node,String url)async{
+    final controller=Get.put(EditProfileController());
+    FirebaseDatabase.instance.ref('Accounts').child('ClientAccounts').child(node).set({
+      'email': controller.emailController.value.value.text.toString(),
+      'phoneNumber': controller.phoneNoController.value.value.text.toString(),
+      'profilePicture': url,
+      'userName': controller.usernameController.value.value.text.toString(),
+      'fullName': controller.fullNameController.value.value.text.toString(),
+      'token': controller.userDate['token'],
+    }).then((value) {
+
+      UserPref.saveUser({
+        'email': controller.emailController.value.value.text.toString(),
+        'phoneNumber': controller.phoneNoController.value.value.text.toString(),
+        'profilePicture': url,
+        'userName': controller.usernameController.value.value.text.toString(),
+        'fullName': controller.fullNameController.value.value.text.toString(),
+        'token': controller.userDate['token']!,
+        'type': 'client'
+      });
+
+
+
+      controller.loading.value=false;
+      Get.toNamed(RoutesName.home);
+      Utils.showSnackBar('Success', 'Successfully Updates', Icon(Icons.done_all));
+    }).onError((error, stackTrace){
+      Utils.showSnackBar('Warning', 'Something went wrong try again', Icon(Icons.warning_amber));
+      controller.loading.value=false;
+    });
+
+  }
+
+
+
 }

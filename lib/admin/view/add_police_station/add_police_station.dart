@@ -1,5 +1,10 @@
+import 'package:ecrime/admin/view/add_police_station/all_stations.dart';
+import 'package:ecrime/client/View/widgets/widgets_barrel.dart';
+import 'package:ecrime/client/utils/utils.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
 class AddPoliceStationPage extends StatefulWidget {
   const AddPoliceStationPage({super.key});
@@ -13,65 +18,7 @@ class _AddPoliceStationPageState extends State<AddPoliceStationPage> {
   final TextEditingController locationController = TextEditingController();
   final TextEditingController districtController = TextEditingController();
 
-  void _addPoliceStation() {
-    String name = nameController.text.trim();
-    String location = locationController.text.trim();
-    String district = districtController.text.trim();
-
-    FirebaseFirestore.instance
-        .collection('policeStations')
-        .where('name', isEqualTo: name.toLowerCase())
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      if (querySnapshot.docs.isNotEmpty) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Police Station Exists'),
-              content: Text('The police station $name already exists.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        FirebaseFirestore.instance.collection('policeStations').add({
-          'name': name.toLowerCase(),
-          'location': location,
-          'district': district,
-        }).then((_) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Police Station Added'),
-                content: Text(
-                    'The police station $name has been added successfully.'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-        }).catchError((error) {
-          print('Error adding police station: $error');
-        });
-      }
-    });
-  }
+  bool loading=false;
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +48,54 @@ class _AddPoliceStationPageState extends State<AddPoliceStationPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _addPoliceStation,
-              child: const Text('Add Police Station'),
+              onPressed: () {
+
+                if(nameController.value.text.toString().isEmpty || locationController.value.text.toString().isEmpty || districtController.value.text.toString().isEmpty){
+                  Utils.showSnackBar('Warning', 'Please fill data correctly', Icon(Icons.warning_amber));
+                  return;
+                }
+
+                setState(() {
+                  loading=true;
+                });
+                FirebaseDatabase.instance.ref('PoliceStations').child(DateTime.now().microsecondsSinceEpoch.toString()).set({
+                  'name' : nameController.value.text.toString(),
+                  'location' : locationController.value.text.toString(),
+                  'district' : districtController.value.text.toString(),
+                }).then((value) {
+                  setState(() {
+                    loading=false;
+                  });
+                  Get.back();
+                  Utils.showSnackBar('Success', 'Successfully added police station', Icon(Icons.done_all));
+                }).onError((error, stackTrace) {
+                  setState(() {
+                    Utils.showSnackBar('Warning', 'Something went wrong', Icon(Icons.warning_amber));
+                    loading=false;
+                  });
+                });
+
+
+
+              },
+              child: loading ? Center(child: SizedBox(
+                height: 15,
+                width: 15,
+                child: CircularProgressIndicator(
+                  color: AppColor.primaryColor,
+                ),
+              ),) :const Text('Add Police Station'),
             ),
+
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: (){
+                Get.to(AllStations());
+              },
+              child:const Text('See all police stations'),
+            ),
+
+
           ],
         ),
       ),
@@ -111,48 +103,3 @@ class _AddPoliceStationPageState extends State<AddPoliceStationPage> {
   }
 }
 
-class ViewPoliceStationsPage extends StatelessWidget {
-  const ViewPoliceStationsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('View Police Stations'),
-      ),
-      body: StreamBuilder(
-        stream:
-            FirebaseFirestore.instance.collection('policeStations').snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          }
-
-          List<QueryDocumentSnapshot> policeStations = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: policeStations.length,
-            itemBuilder: (context, index) {
-              return PoliceStationListItem(
-                  policeStationSnapshot: policeStations[index]);
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-class PoliceStationListItem extends StatelessWidget {
-  final QueryDocumentSnapshot policeStationSnapshot;
-
-  const PoliceStationListItem({super.key, required this.policeStationSnapshot});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(policeStationSnapshot['name']),
-      subtitle: Text(policeStationSnapshot['district']),
-    );
-  }
-}

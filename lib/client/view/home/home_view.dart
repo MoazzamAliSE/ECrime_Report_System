@@ -109,8 +109,8 @@ class HomeScreenClient extends StatelessWidget {
   }
 
   void regComplainDialog(BuildContext context) {
-    var complainCorruption = 'Corruption';
-    var complainService = 'Service';
+    var complainCorruption = 'corruption';
+    var complainService = 'service';
 
     showDialog(
       context: context,
@@ -145,7 +145,7 @@ class HomeScreenClient extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              ComplainPage(complainType: complainCorruption),
+                              ComplainPage(complainType: complainService),
                         ));
                   },
                 ),

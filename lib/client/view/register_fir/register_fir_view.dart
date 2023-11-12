@@ -131,11 +131,11 @@ class _RegisterFIRState extends State<RegisterFIR> {
                   _step2Key,
                   (value) => _validateField(value, 'Incident Address')),
               _buildDateTimePicker(),
-              _buildDropdown(
+              Obx(() => _buildDropdown(
                 'Nearest Police Station',
-                policeStationList,
-                (value) => controller.model.value.nearestPoliceStation = value!,
-              ),
+                controller.stationList,
+                    (value) => controller.model.value.nearestPoliceStation = value!,
+              ),),
             ],
           ),
         ),
