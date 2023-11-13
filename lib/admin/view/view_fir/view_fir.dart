@@ -63,7 +63,7 @@ class _ViewFIRsPageState extends State<ViewFIRsPage> {
                     ),
                   ),
                   title: Text(
-                    'FIR Number ${Random().nextInt(500)}',
+                    'FIR Number ${snapshot.child('firNumber').value.toString()}',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(

@@ -163,13 +163,15 @@ class FirebaseServices {
         .child(key)
         .set({
       'key': key,
+      'status' : 'Pending',
       'evidenceUrl': evidenceUrl,
       'profileImage' : (await UserPref.getUser())['profilePicture'],
       'victimType': registerFirController.fireType.value,
       'fireType': registerFirController.model.value.firType,
       'cinc': registerFirController.model.value.cnic,
       'name': registerFirController.model.value.name,
-      'status' : registerFirController.model.value.status,
+      'firNumber' : Random().nextInt(300).toString(),
+      'assignTo' : 'No One',
       'phoneNumber': registerFirController.model.value.phoneNumber,
       'address': registerFirController.model.value.address,
       'fatherName': registerFirController.model.value.fathersName,
@@ -358,6 +360,13 @@ class FirebaseServices {
             if(value.snapshot.child('type').value.toString() == 'admin'){
               final userSnapshot = value.snapshot;
               UserPref.saveUser({
+
+
+                'phoneNumber': '_',
+                'profilePicture': '_',
+                'fullName': '_',
+
+
                 'userName': userSnapshot.child('userName').value.toString(),
                 'email': userSnapshot.child('email').value.toString(),
                 'token': userSnapshot.child('token').value.toString(),
@@ -408,6 +417,9 @@ class FirebaseServices {
         'type': type,
       }).then((v) {
         UserPref.saveUser({
+          'phoneNumber': '_',
+          'profilePicture': '_',
+          'fullName': '_',
           'email': email,
           'userName': signUpAdminController.userName.value.text.toString(),
           'token': value.user!.uid,
