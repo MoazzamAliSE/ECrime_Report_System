@@ -1,4 +1,7 @@
 import 'dart:math';
+import 'package:ecrime/admin/view%20model/controller/signIn_admin_controller.dart';
+import 'package:ecrime/admin/view%20model/controller/signup_controller.dart';
+import 'package:ecrime/admin/view/admin_home/admin_home.dart';
 import 'package:ecrime/client/View/widgets/widgets_barrel.dart';
 import 'package:ecrime/client/data/user%20pref/user_pref.dart';
 import 'package:ecrime/client/res/routes/routes_name.dart';
@@ -18,7 +21,7 @@ class FirebaseServices {
   static final FirebaseDatabase database = FirebaseDatabase.instance;
 
   // Create New Account Store User Data locally and Live
-  static Future<void> createAccount() async {
+  static Future<void> createAccount(String type) async {
     final signUpController = Get.put(SignUpController());
     signUpController.loading.value = true;
     FirebaseStorage storage = FirebaseStorage.instance;
@@ -44,6 +47,7 @@ class FirebaseServices {
             'userName': signUpController.userName.value.text.toString(),
             'fullName': signUpController.fullName.value.text.toString(),
             'token': value.user!.uid,
+            'type' : type,
           }).then((v) {
             UserPref.saveUser({
               'email': email,
@@ -52,7 +56,7 @@ class FirebaseServices {
               'userName': signUpController.userName.value.text.toString(),
               'fullName': signUpController.fullName.value.text.toString(),
               'token': value.user!.uid,
-              'type': 'client'
+              'type': type
             });
 
             Get.offAllNamed(RoutesName.home);
@@ -104,21 +108,31 @@ class FirebaseServices {
           .child(email.substring(0, email.indexOf('@')))
           .once()
           .then((value) {
-        final userSnapshot = value.snapshot;
-        UserPref.saveUser({
-          'userName': userSnapshot.child('userName').value.toString(),
-          'fullName': userSnapshot.child('fullName').value.toString(),
-          'email': userSnapshot.child('email').value.toString(),
-          'phoneNumber': userSnapshot.child('phoneNumber').value.toString(),
-          'profilePicture':
-              userSnapshot.child('profilePicture').value.toString(),
-          'token': userSnapshot.child('token').value.toString(),
-          'type': 'client',
-        });
-        Get.offAllNamed(RoutesName.home);
-        Utils.showSnackBar('Success', 'Successfully Login to your account',
-            const Icon(Icons.done_all));
-        signInController.loading.value = false;
+
+            if(value.snapshot.child('type').value.toString()=='client'){
+              final userSnapshot = value.snapshot;
+              UserPref.saveUser({
+                'userName': userSnapshot.child('userName').value.toString(),
+                'fullName': userSnapshot.child('fullName').value.toString(),
+                'email': userSnapshot.child('email').value.toString(),
+                'phoneNumber': userSnapshot.child('phoneNumber').value.toString(),
+                'profilePicture':
+                userSnapshot.child('profilePicture').value.toString(),
+                'token': userSnapshot.child('token').value.toString(),
+                'type': userSnapshot.child('type').value.toString(),
+              });
+              Get.offAllNamed(RoutesName.home);
+              Utils.showSnackBar('Success', 'Successfully Login to your account',
+                  const Icon(Icons.done_all));
+              signInController.loading.value = false;
+            }else{
+              FirebaseAuth.instance.signOut();
+              signInController.loading.value = false;
+              Utils.showSnackBar('Error', 'Something went wrong try again',
+                  const Icon(Icons.warning_amber));
+            }
+
+
       }).onError((error, stackTrace) {
         signInController.loading.value = false;
         Utils.showSnackBar('Error', 'Something went wrong try again',
@@ -305,6 +319,130 @@ class FirebaseServices {
 
   }
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // admin account 
+  static Future<void> signInAdminAccount() async {
+    final signInController = Get.put(SigninAdminController());
+    signInController.loading.value = true;
+    String email = signInController.userEmail.value.text.toString();
+    String password = signInController.userPassword.value.text.toString();
+
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      final String email = value.user!.email!;
+      FirebaseDatabase.instance
+          .ref('Accounts')
+          .child('AdminAccounts')
+          .child(email.substring(0, email.indexOf('@')))
+          .once()
+          .then((value) {
+
+
+            if(value.snapshot.child('type').value.toString() == 'admin'){
+              final userSnapshot = value.snapshot;
+              UserPref.saveUser({
+                'userName': userSnapshot.child('userName').value.toString(),
+                'email': userSnapshot.child('email').value.toString(),
+                'token': userSnapshot.child('token').value.toString(),
+                'type': userSnapshot.child('type').value.toString(),
+              });
+              Get.offAll(AdminHomePage());
+              Utils.showSnackBar('Success', 'Successfully Login to your account',
+                  const Icon(Icons.done_all));
+              signInController.loading.value = false;
+            }else{
+              FirebaseAuth.instance.signOut();
+              signInController.loading.value = false;
+              Utils.showSnackBar('Error', 'Something went wrong try again',
+                  const Icon(Icons.warning_amber));
+            }
+
+
+
+      }).onError((error, stackTrace) {
+        signInController.loading.value = false;
+        Utils.showSnackBar('Error', 'Something went wrong try again',
+            const Icon(Icons.warning_amber));
+      });
+    }).onError((error, stackTrace) {
+      signInController.loading.value = false;
+      Utils.showSnackBar('Error', 'Invalid Email or Password',
+          const Icon(Icons.warning_amber));
+    });
+  }
+
+  static Future<void> createAdminAccount(String type) async {
+    final signUpAdminController =Get.put(SignUpAdminController());
+    signUpAdminController.loading.value=true;
+    auth
+        .createUserWithEmailAndPassword(
+        email: signUpAdminController.email.value.text.toString(),
+        password: signUpAdminController.password.value.text.toString())
+        .then((value) {
+      final String email = signUpAdminController.email.value.text.toString();
+      FirebaseDatabase.instance
+          .ref('Accounts')
+          .child('AdminAccounts')
+          .child(email.substring(0, email.indexOf('@')))
+          .set({
+        'email': email,
+        'userName': signUpAdminController.userName.value.text.toString(),
+        'token': value.user!.uid,
+        'type': type,
+      }).then((v) {
+        UserPref.saveUser({
+          'email': email,
+          'userName': signUpAdminController.userName.value.text.toString(),
+          'token': value.user!.uid,
+          'type': type
+        });
+
+        Get.offAll(const AdminHomePage());
+        Utils.showSnackBar('Success', 'Account is successfully Created',
+            const Icon(Icons.done_all));
+        signUpAdminController.loading.value = false;
+      }).onError((error, stackTrace) {
+        signUpAdminController.loading.value = false;
+        Utils.showSnackBar(
+            'Error',
+            Utils.extractFirebaseError(error.toString()),
+            const Icon(Icons.warning_amber));
+      });
+    }).onError((error, stackTrace){
+      signUpAdminController.loading.value = false;
+      Utils.showSnackBar(
+          'Error',
+          Utils.extractFirebaseError(error.toString()),
+          const Icon(Icons.warning_amber));
+    });
+    
+    
+  }
+  
+  
+  
+  
+  
+  
+  
+  
 
 
 }

@@ -1,11 +1,14 @@
+import 'package:ecrime/admin/view%20model/controller/signIn_admin_controller.dart';
 import 'package:ecrime/admin/view/admin_home/admin_home.dart';
 import 'package:ecrime/admin/view/authentication/signup_admin/sign_up.dart';
 import 'package:ecrime/admin/view/view_admin_barrel.dart';
+import 'package:ecrime/client/data/network/firebase_services.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:ecrime/client/widgets/generic_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
 class LoginPageAdmin extends StatefulWidget {
   const LoginPageAdmin({super.key});
@@ -15,89 +18,8 @@ class LoginPageAdmin extends StatefulWidget {
 }
 
 class _LoginPageAdminState extends State<LoginPageAdmin> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool _loading = false;
-  Future<void> _signIn() async {
-    setState(() {
-      _loading = true;
-    });
-
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      User? user = userCredential.user;
-
-      if (user != null) {
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-        if (userSnapshot.exists) {
-          bool isAdmin = userSnapshot['isAdmin'] ?? false;
-
-          if (isAdmin) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const AdminHomePage()),
-            );
-          } else {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Access Denied'),
-                  content: const Text(
-                      'You do not have the right permissions to access the admin page.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                );
-              },
-            );
-          }
-        }
-      }
-    } catch (e) {
-      print('Error during login: $e');
-
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Login Failed'),
-            content: const Text(
-                'Invalid credentials. Please check your email and password.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    } finally {
-      setState(() {
-        _loading = false;
-      });
-    }
-  }
-
+  final controller=Get.put(SigninAdminController());
+  final _formKey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,17 +35,20 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildEmailField(),
-                  const SizedBox(height: 10),
-                  _buildPasswordField(),
-                  const SizedBox(height: 20),
-                  _buildLoginButton(),
-                  const SizedBox(height: 10),
-                  _buildSignUpButton(context),
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildEmailField(),
+                    const SizedBox(height: 10),
+                    _buildPasswordField(),
+                    const SizedBox(height: 20),
+                    _buildLoginButton(),
+                    const SizedBox(height: 10),
+                    _buildSignUpButton(context),
+                  ],
+                ),
               ),
             ),
           ),
@@ -150,21 +75,31 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
     );
   }
 
-  ElevatedButton _buildLoginButton() {
-    return ElevatedButton(
-      onPressed: _loading ? null : _signIn,
-      child: _loading ? Center(child: const CircularProgressIndicator()) : const Text('Login'),
+   _buildLoginButton() {
+    return SizedBox(
+      width: 150,
+      height: 45,
+      child: ElevatedButton(
+        onPressed:controller.loading.value ? null : () {
+          if(_formKey.currentState!.validate()){
+            FirebaseServices.signInAdminAccount();
+          }
+        },
+        child: Obx(() => controller.loading.value ? Center(child: const CircularProgressIndicator()) : const Text('Login'),)
+      ),
     );
   }
 
-  GenericTextField _buildPasswordField() {
-    return GenericTextField(
-      controller: _passwordController,
+   _buildPasswordField() {
+    return Obx(() => GenericTextField(
+      controller: controller.userPassword,
       labelText: 'Password',
       hintText: 'Enter your password',
       prefixIcon: const Icon(Icons.lock),
-      obscureText: true,
-      suffixIcon: const Icon(Icons.visibility),
+      obscureText: controller.obscurePassword.value,
+      suffixIcon: GestureDetector(
+          onTap: () => controller.obscurePassword.toggle(),
+          child: const Icon(Icons.visibility)),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Password is required';
@@ -173,12 +108,12 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
         }
         return null;
       },
-    );
+    ));
   }
 
   GenericTextField _buildEmailField() {
     return GenericTextField(
-      controller: _emailController,
+      controller: controller.userEmail,
       labelText: 'Email',
       hintText: 'Enter your email',
       prefixIcon: const Icon(Icons.mail),

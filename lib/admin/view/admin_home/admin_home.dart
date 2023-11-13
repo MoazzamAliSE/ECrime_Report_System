@@ -1,6 +1,8 @@
 import 'package:ecrime/admin/view/authentication/login_admin/login_admin.dart';
 import 'package:ecrime/admin/view/view_admin_barrel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHomePage extends StatelessWidget {
   const AdminHomePage({
@@ -15,8 +17,11 @@ class AdminHomePage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
-                _showLogoutConfirmationDialog(context);
+              onPressed: () async {
+                FirebaseAuth.instance.signOut();
+                SharedPreferences pref=await SharedPreferences.getInstance();
+                pref.clear();
+                Get.offAll(LoginPageAdmin());
               },
               icon: const Icon(Icons.logout))
         ],

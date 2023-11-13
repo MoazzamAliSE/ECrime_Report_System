@@ -34,6 +34,6 @@ class SignUpController extends GetxController {
   }
 
   createAccount() {
-    FirebaseServices.createAccount();
+    FirebaseServices.createAccount('client');
   }
 }
