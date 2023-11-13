@@ -1,8 +1,9 @@
+import 'package:ecrime/admin/view%20model/controller/view_corruption_controller.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import '../../../constants.dart';
 import 'corruption_compain_page.dart';
@@ -17,6 +18,8 @@ class ViewComplaintsPage extends StatefulWidget {
 class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
   bool isComplainService = false;
   bool isDataLoaded = false;
+
+  final controller=Get.put(ViewCorruptionController());
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +111,47 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
                   ),
                 ),
               ),
-              isDataLoaded ? _buildPieChart() : Container(),
-              isDataLoaded ? _buildUserListTiles() : Container(),
+              SizedBox(height: 30,),
+              Obx(() => controller.hasData.value? PieChart(
+                dataMap: {
+                  'All Complains' : controller.totalComplains.toDouble(),
+                  'Corruption' : controller.corruptionComplain.toDouble(),
+                  'Service' : controller.serviceComplain.toDouble(),
+                },
+                animationDuration: const Duration(milliseconds: 800),
+                chartLegendSpacing: 32,
+                chartRadius: MediaQuery.of(context).size.width / 3.2,
+                colorList: const [
+                  Colors.red,
+                  Colors.green,
+                  Colors.yellow
+                ],
+                initialAngleInDegree: 0,
+                chartType: ChartType.ring,
+                ringStrokeWidth: 32,
+                centerText: "Stats",
+                legendOptions: const LegendOptions(
+                  showLegendsInRow: false,
+                  legendPosition: LegendPosition.right,
+                  showLegends: true,
+                  legendShape: BoxShape.circle,
+                  legendTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                chartValuesOptions: const ChartValuesOptions(
+                  showChartValueBackground: true,
+                  showChartValues: true,
+                  showChartValuesInPercentage: false,
+                  showChartValuesOutside: false,
+                  decimalPlaces: 1,
+                ),
+                // gradientList: ---To add gradient colors---
+                // emptyColorGradient: ---Empty Color gradient---
+              )  :Center(child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(
+                color: AppColor.primaryColor,
+              ),),) ),
+
             ],
           ),
         ),
@@ -117,114 +159,117 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
     );
   }
 
-  Widget _buildPieChart() {
-    Map<String, int> data = isComplainService
-        ? {'Resolved': 5, 'InProgress': 3, 'Rejected': 2}
-        : {'Resolved': 3, 'InProgress': 1, 'Rejected': 2};
 
-    return Container(
-      height: 200,
-      padding: const EdgeInsets.all(16),
-      child: PieChart(
-        PieChartData(
-          sectionsSpace: 5,
-          centerSpaceRadius: 40,
-          startDegreeOffset: 90,
-          sections: _generatePieChartSections(data),
-        ),
-      ),
-    );
-  }
 
-  List<PieChartSectionData> _generatePieChartSections(Map<String, int> data) {
-    return data.entries.map((entry) {
-      return PieChartSectionData(
-        color: _getStatusColor(entry.key),
-        value: entry.value.toDouble(),
-        title: '${entry.value}',
-        radius: 50,
-        titleStyle: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-      );
-    }).toList();
-  }
 
-  Widget _buildUserListTiles() {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('users').snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
 
-        List<QueryDocumentSnapshot> users = snapshot.data!.docs;
 
-        return Column(
-          children: users
-              .map((user) => ListTile(
-                    title: Text(user['username']),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ComplaintsFromUserPage(userId: user.id),
-                        ),
-                      );
-                    },
-                  ))
-              .toList(),
-        );
-      },
-    );
-  }
 
-  Color _getStatusColor(String status) {
-    List<Color> colors = [
-      Colors.blue,
-      Colors.orange,
-      Colors.green,
-      Colors.red,
-      Colors.purple
-    ];
-    return colors[status.hashCode % colors.length];
-  }
+  // Widget _buildPieChart() {
+  //   Map<String, int> data = isComplainService
+  //       ? {'Resolved': 5, 'InProgress': 3, 'Rejected': 2}
+  //       : {'Resolved': 3, 'InProgress': 1, 'Rejected': 2};
+  //
+  //   return Container(
+  //     height: 200,
+  //     padding: const EdgeInsets.all(16),
+  //     child: PieChart(
+  //       PieChartData(
+  //         sectionsSpace: 5,
+  //         centerSpaceRadius: 40,
+  //         startDegreeOffset: 90,
+  //         sections: _generatePieChartSections(data),
+  //       ),
+  //     ),
+  //   );
+  // }
+  // List<PieChartSectionData> _generatePieChartSections(Map<String, int> data) {
+  //   return data.entries.map((entry) {
+  //     return PieChartSectionData(
+  //       color: _getStatusColor(entry.key),
+  //       value: entry.value.toDouble(),
+  //       title: '${entry.value}',
+  //       radius: 50,
+  //       titleStyle: const TextStyle(
+  //           fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+  //     );
+  //   }).toList();
+  // }
+  // Widget _buildUserListTiles() {
+  //   return StreamBuilder(
+  //     stream: FirebaseFirestore.instance.collection('users').snapshots(),
+  //     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+  //       if (!snapshot.hasData) {
+  //         return const Center(child: CircularProgressIndicator());
+  //       }
+  //
+  //       List<QueryDocumentSnapshot> users = snapshot.data!.docs;
+  //
+  //       return Column(
+  //         children: users
+  //             .map((user) => ListTile(
+  //                   title: Text(user['username']),
+  //                   onTap: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(
+  //                         builder: (context) =>
+  //                             ComplaintsFromUserPage(userId: user.id),
+  //                       ),
+  //                     );
+  //                   },
+  //                 ))
+  //             .toList(),
+  //       );
+  //     },
+  //   );
+  // }
+  // Color _getStatusColor(String status) {
+  //   List<Color> colors = [
+  //     Colors.blue,
+  //     Colors.orange,
+  //     Colors.green,
+  //     Colors.red,
+  //     Colors.purple
+  //   ];
+  //   return colors[status.hashCode % colors.length];
+  // }
 }
-
-class ComplaintsFromUserPage extends StatelessWidget {
-  final String userId;
-
-  const ComplaintsFromUserPage({Key? key, required this.userId})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Complaints from User'),
-      ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('complaints')
-            .where('userId', isEqualTo: userId)
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          List<QueryDocumentSnapshot> userComplaints = snapshot.data!.docs;
-
-          return ListView(
-            children: userComplaints
-                .map((complaint) => ComplaintCard(complaint: complaint))
-                .toList(),
-          );
-        },
-      ),
-    );
-  }
-}
+//
+// class ComplaintsFromUserPage extends StatelessWidget {
+//   final String userId;
+//
+//   const ComplaintsFromUserPage({Key? key, required this.userId})
+//       : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Complaints from User'),
+//       ),
+//       body: StreamBuilder(
+//         stream: FirebaseFirestore.instance
+//             .collection('complaints')
+//             .where('userId', isEqualTo: userId)
+//             .snapshots(),
+//         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+//           if (!snapshot.hasData) {
+//             return const Center(child: CircularProgressIndicator());
+//           }
+//
+//           List<QueryDocumentSnapshot> userComplaints = snapshot.data!.docs;
+//
+//           return ListView(
+//             children: userComplaints
+//                 .map((complaint) => ComplaintCard(complaint: complaint))
+//                 .toList(),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
 class ComplaintCard extends StatelessWidget {
   final QueryDocumentSnapshot complaint;

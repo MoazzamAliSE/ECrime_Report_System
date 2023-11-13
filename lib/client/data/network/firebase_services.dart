@@ -164,6 +164,7 @@ class FirebaseServices {
         .set({
       'key': key,
       'status' : 'Pending',
+      'email' : email,
       'evidenceUrl': evidenceUrl,
       'profileImage' : (await UserPref.getUser())['profilePicture'],
       'victimType': registerFirController.fireType.value,

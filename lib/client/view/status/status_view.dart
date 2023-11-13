@@ -1,5 +1,7 @@
 import 'package:ecrime/client/view/status/result_status.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 
 class StatusPage extends StatefulWidget {
   const StatusPage({Key? key}) : super(key: key);
@@ -52,89 +54,131 @@ class _StatusPageState extends State<StatusPage> {
       body: BackgroundFrame(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Enter the Following details',
-                style: TextStyle(
-                  fontSize: 18, // You can adjust the size as needed
-                  fontWeight: FontWeight.bold,
+          child: FirebaseAnimatedList(query: FirebaseDatabase.instance.ref('Firs'), itemBuilder: (context, snapshot, animation, index) {
+
+            if(snapshot.child('email').value.toString() ==FirebaseAuth.instance.currentUser!.email ){
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Fir Number: ',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        Text(snapshot.child('firNumber').value.toString()),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Submitted at: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        Text(snapshot
+                            .child('incidentDateTime')
+                            .value
+                            .toString()
+                            .substring(
+                            0,
+                            snapshot
+                                .child('incidentDateTime')
+                                .value
+                                .toString()
+                                .indexOf(' -'))),
+                      ],
+                    ),
+                    const Text(
+                      'Description: ',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+
+                    Text(
+                        ' ${snapshot.child('incidentDetails').value.toString()}'),
+                    const Text(
+                      'Assign to: ',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+
+                    Text(
+                        ' ${snapshot.child('assignTo').value.toString()}'),
+                    Row(
+                      children: [
+                        const Text(
+                          'Current Status : ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        Text(snapshot
+                            .child('status')
+                            .value
+                            .toString()),
+                      ],
+                    ),
+
+                  ],
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              _buildDropdown('District', districtList, (value) {
-                setState(() {
-                  selectedDistrict = value!;
-                });
-              }),
-              const SizedBox(height: 16.0),
-              _buildDropdown('Police Station', policeStations, (value) {
-                setState(() {
-                  selectedPoliceStation = value!;
-                });
-              }),
-              const SizedBox(height: 16.0),
-              GenericTextField(
-                labelText: 'FIR Number',
-                controller: firNumberController,
-              ),
-              const SizedBox(height: 32.0),
-              ElevatedButton(
-                onPressed: () {
-                  String firStatus = 'Accepted';
-                  _showStatusPage(firStatus);
-                },
-                child: const Text('Check'),
-              ),
-            ],
-          ),
+              );
+            }else{
+              return Container();
+            }
+
+          },),
         ),
       ),
     );
   }
 
-  void _showStatusPage(String firStatus) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => StatusResultPage(firStatus: firStatus),
-      ),
-    );
-  }
 
-  Widget _buildDropdown(
-      String labelText, List<String> items, Function(String?) onChanged) {
-    return DropdownButtonFormField<String>(
-      key: Key(labelText),
-      decoration: InputDecoration(
-        labelText: labelText,
-        contentPadding: const EdgeInsets.all(16.0),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: Colors.black, width: 1.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: Colors.red, width: 2.0),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: Colors.red, width: 2.0),
-        ),
-      ),
-      items: items.map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: onChanged,
-      value: labelText == 'District' ? selectedDistrict : selectedPoliceStation,
-    );
-  }
+
+
+
+
+
+  // void _showStatusPage(String firStatus) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => StatusResultPage(firStatus: firStatus),
+  //     ),
+  //   );
+  // }
+  //
+  // Widget _buildDropdown(
+  //     String labelText, List<String> items, Function(String?) onChanged) {
+  //   return DropdownButtonFormField<String>(
+  //     key: Key(labelText),
+  //     decoration: InputDecoration(
+  //       labelText: labelText,
+  //       contentPadding: const EdgeInsets.all(16.0),
+  //       enabledBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(10.0),
+  //         borderSide: const BorderSide(color: Colors.black, width: 1.0),
+  //       ),
+  //       focusedBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(10.0),
+  //         borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+  //       ),
+  //       errorBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(10.0),
+  //         borderSide: const BorderSide(color: Colors.red, width: 2.0),
+  //       ),
+  //       focusedErrorBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(10.0),
+  //         borderSide: const BorderSide(color: Colors.red, width: 2.0),
+  //       ),
+  //     ),
+  //     items: items.map((String value) {
+  //       return DropdownMenuItem<String>(
+  //         value: value,
+  //         child: Text(value),
+  //       );
+  //     }).toList(),
+  //     onChanged: onChanged,
+  //     value: labelText == 'District' ? selectedDistrict : selectedPoliceStation,
+  //   );
+  // }
 }

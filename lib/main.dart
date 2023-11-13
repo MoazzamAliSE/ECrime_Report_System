@@ -16,7 +16,6 @@ void main() async {
 
 class MyClientApp extends StatelessWidget {
   const MyClientApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     // variable for admin or client
