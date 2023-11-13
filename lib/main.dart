@@ -18,10 +18,9 @@ class MyClientApp extends StatelessWidget {
   const MyClientApp({super.key});
   @override
   Widget build(BuildContext context) {
-    // variable for admin or client
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      getPages: AppRoutes.pages(), // client side
+      getPages: AppRoutes.pages(),
       theme: ThemeData(
         useMaterial3: true,
         appBarTheme: AppBarTheme(

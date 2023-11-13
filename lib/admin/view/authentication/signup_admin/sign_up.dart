@@ -1,7 +1,5 @@
 import 'package:ecrime/admin/view%20model/controller/signup_controller.dart';
-import 'package:ecrime/client/View/widgets/widgets_barrel.dart';
-import 'package:ecrime/client/widgets/generic_text_form_field.dart';
-import 'package:flutter/material.dart';
+import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:get/get.dart';
 
 class SignupPageAdmin extends StatefulWidget {
@@ -12,23 +10,26 @@ class SignupPageAdmin extends StatefulWidget {
 }
 
 class _SignupPageAdminState extends State<SignupPageAdmin> {
-  final controller=Get.put(SignUpAdminController());
-  final _formKey=GlobalKey<FormState>();
+  final controller = Get.put(SignUpAdminController());
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Signup'),
       ),
-      body: Stack(
-        children: [
-          Padding(
+      body: BackgroundFrame(
+        child: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 10),
+                  const ImageLogoAuth(),
+                  const SizedBox(height: 50),
                   _buildUserNameField(),
                   const SizedBox(height: 15),
                   _buildEmailField(),
@@ -49,68 +50,79 @@ class _SignupPageAdminState extends State<SignupPageAdmin> {
               ),
             ),
           ),
-
-        ],
+        ),
       ),
     );
   }
 
-   _completeRegistrationButton() {
+  _completeRegistrationButton() {
     return SizedBox(
       height: 45,
       width: 180,
       child: ElevatedButton(
-        onPressed:controller.loading.value?null : () async {
-          if(_formKey.currentState!.validate()){
-            controller.createAccount();
-
-          }
-        },
-        child:Obx(() => controller.loading.value ? Center(child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(color: AppColor.primaryColor,),),): const Text('Signup as Admin'),)
-      ),
+          onPressed: controller.loading.value
+              ? null
+              : () async {
+                  if (_formKey.currentState!.validate()) {
+                    controller.createAccount();
+                  }
+                },
+          child: Obx(
+            () => controller.loading.value
+                ? Center(
+                    child: SizedBox(
+                      height: 15,
+                      width: 15,
+                      child: CircularProgressIndicator(
+                        color: AppColor.primaryColor,
+                      ),
+                    ),
+                  )
+                : const Text('Signup as Admin'),
+          )),
     );
   }
 
-   _buildConfirmPasswordField() {
+  _buildConfirmPasswordField() {
     return Obx(() => GenericTextField(
-      controller: controller.confirmPassword,
-      labelText: 'Confirm Password',
-      hintText: 'Re-enter your password',
-      prefixIcon: const Icon(Icons.lock),
-      obscureText: controller.obscurePassword.value,
-      suffixIcon: GestureDetector(
-          onTap:() =>  controller.obscurePassword.toggle(),
-          child: const Icon(Icons.visibility)),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Confirm Password is required';
-        } else if (value != controller.password.value.text.toString()) {
-          return 'Passwords do not match';
-        }
-        return null;
-      },
-    ));
+          controller: controller.confirmPassword,
+          labelText: 'Confirm Password',
+          hintText: 'Re-enter your password',
+          prefixIcon: const Icon(Icons.lock),
+          obscureText: controller.obscurePassword.value,
+          suffixIcon: GestureDetector(
+              onTap: () => controller.obscurePassword.toggle(),
+              child: const Icon(Icons.visibility)),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Confirm Password is required';
+            } else if (value != controller.password.value.text.toString()) {
+              return 'Passwords do not match';
+            }
+            return null;
+          },
+        ));
   }
 
-   _buildPasswordField() {
+  _buildPasswordField() {
     return Obx(() => GenericTextField(
-      controller: controller.password,
-      labelText: 'Password',
-      hintText: 'Enter your password',
-      prefixIcon: const Icon(Icons.lock),
-      obscureText: controller.obscurePassword.value,
-      suffixIcon: GestureDetector(
-          onTap: () => controller.obscurePassword.toggle(),
-          child: const Icon(Icons.visibility)),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Password is required';
-        } else if (value.length < 6) {
-          return 'Password must be at least 6 characters';
-        }
-        return null;
-      },
-    ));
+          controller: controller.password,
+          labelText: 'Password',
+          hintText: 'Enter your password',
+          prefixIcon: const Icon(Icons.lock),
+          obscureText: controller.obscurePassword.value,
+          suffixIcon: GestureDetector(
+              onTap: () => controller.obscurePassword.toggle(),
+              child: const Icon(Icons.visibility)),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Password is required';
+            } else if (value.length < 6) {
+              return 'Password must be at least 6 characters';
+            }
+            return null;
+          },
+        ));
   }
 
   GenericTextField _buildEmailField() {
@@ -132,7 +144,7 @@ class _SignupPageAdminState extends State<SignupPageAdmin> {
     );
   }
 
-   _buildUserNameField() {
+  _buildUserNameField() {
     return GenericTextField(
       controller: controller.userName,
       labelText: 'Username',

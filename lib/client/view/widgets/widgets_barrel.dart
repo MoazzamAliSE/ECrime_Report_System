@@ -30,3 +30,8 @@ export 'package:firebase_storage/firebase_storage.dart';
 export 'package:flutter_svg/flutter_svg.dart';
 export 'package:image_picker/image_picker.dart';
 export 'dart:async';
+
+export 'package:ecrime/admin/view%20model/controller/signIn_admin_controller.dart';
+export 'package:ecrime/admin/view/authentication/signup_admin/sign_up.dart';
+export 'package:ecrime/client/data/network/firebase_services.dart';
+export 'package:ecrime/client/widgets/imageLogoAuth.dart';

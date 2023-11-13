@@ -19,7 +19,7 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
   bool isComplainService = false;
   bool isDataLoaded = false;
 
-  final controller=Get.put(ViewCorruptionController());
+  final controller = Get.put(ViewCorruptionController());
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +63,7 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight:
-                                        FontWeight.bold, // Make text bold
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -98,8 +97,7 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight:
-                                        FontWeight.bold, // Make text bold
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -111,165 +109,66 @@ class _ViewComplaintsPageState extends State<ViewComplaintsPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 30,),
-              Obx(() => controller.hasData.value? PieChart(
-                dataMap: {
-                  'All Complains' : controller.totalComplains.toDouble(),
-                  'Corruption' : controller.corruptionComplain.toDouble(),
-                  'Service' : controller.serviceComplain.toDouble(),
-                },
-                animationDuration: const Duration(milliseconds: 800),
-                chartLegendSpacing: 32,
-                chartRadius: MediaQuery.of(context).size.width / 3.2,
-                colorList: const [
-                  Colors.red,
-                  Colors.green,
-                  Colors.yellow
-                ],
-                initialAngleInDegree: 0,
-                chartType: ChartType.ring,
-                ringStrokeWidth: 32,
-                centerText: "Stats",
-                legendOptions: const LegendOptions(
-                  showLegendsInRow: false,
-                  legendPosition: LegendPosition.right,
-                  showLegends: true,
-                  legendShape: BoxShape.circle,
-                  legendTextStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                chartValuesOptions: const ChartValuesOptions(
-                  showChartValueBackground: true,
-                  showChartValues: true,
-                  showChartValuesInPercentage: false,
-                  showChartValuesOutside: false,
-                  decimalPlaces: 1,
-                ),
-                // gradientList: ---To add gradient colors---
-                // emptyColorGradient: ---Empty Color gradient---
-              )  :Center(child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(
-                color: AppColor.primaryColor,
-              ),),) ),
-
+              const SizedBox(
+                height: 30,
+              ),
+              const Text(
+                "Statistics in Pie Chart",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Obx(() => controller.hasData.value
+                  ? PieChart(
+                      dataMap: {
+                        'All Complains': controller.totalComplains.toDouble(),
+                        'Corruption': controller.corruptionComplain.toDouble(),
+                        'Service': controller.serviceComplain.toDouble(),
+                      },
+                      animationDuration: const Duration(milliseconds: 800),
+                      chartLegendSpacing: 32,
+                      chartRadius: MediaQuery.of(context).size.width / 3,
+                      colorList: const [Colors.red, Colors.blue, Colors.green],
+                      initialAngleInDegree: 0,
+                      chartType: ChartType.ring,
+                      ringStrokeWidth: 32,
+                      centerText: "Complain Stats",
+                      legendOptions: const LegendOptions(
+                        showLegendsInRow: false,
+                        legendPosition: LegendPosition.right,
+                        showLegends: true,
+                        legendShape: BoxShape.rectangle,
+                        legendTextStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      chartValuesOptions: ChartValuesOptions(
+                        chartValueStyle:
+                            TextStyle(color: AppColor.primaryColor),
+                        showChartValueBackground: true,
+                        showChartValues: true,
+                        showChartValuesInPercentage: false,
+                        showChartValuesOutside: false,
+                        decimalPlaces: 1,
+                        chartValueBackgroundColor: AppColor.whiteColor,
+                      ))
+                  : Center(
+                      child: SizedBox(
+                        height: 15,
+                        width: 15,
+                        child: CircularProgressIndicator(
+                          color: AppColor.primaryColor,
+                        ),
+                      ),
+                    )),
             ],
           ),
         ),
       ),
     );
   }
-
-
-
-
-
-
-
-  // Widget _buildPieChart() {
-  //   Map<String, int> data = isComplainService
-  //       ? {'Resolved': 5, 'InProgress': 3, 'Rejected': 2}
-  //       : {'Resolved': 3, 'InProgress': 1, 'Rejected': 2};
-  //
-  //   return Container(
-  //     height: 200,
-  //     padding: const EdgeInsets.all(16),
-  //     child: PieChart(
-  //       PieChartData(
-  //         sectionsSpace: 5,
-  //         centerSpaceRadius: 40,
-  //         startDegreeOffset: 90,
-  //         sections: _generatePieChartSections(data),
-  //       ),
-  //     ),
-  //   );
-  // }
-  // List<PieChartSectionData> _generatePieChartSections(Map<String, int> data) {
-  //   return data.entries.map((entry) {
-  //     return PieChartSectionData(
-  //       color: _getStatusColor(entry.key),
-  //       value: entry.value.toDouble(),
-  //       title: '${entry.value}',
-  //       radius: 50,
-  //       titleStyle: const TextStyle(
-  //           fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-  //     );
-  //   }).toList();
-  // }
-  // Widget _buildUserListTiles() {
-  //   return StreamBuilder(
-  //     stream: FirebaseFirestore.instance.collection('users').snapshots(),
-  //     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-  //       if (!snapshot.hasData) {
-  //         return const Center(child: CircularProgressIndicator());
-  //       }
-  //
-  //       List<QueryDocumentSnapshot> users = snapshot.data!.docs;
-  //
-  //       return Column(
-  //         children: users
-  //             .map((user) => ListTile(
-  //                   title: Text(user['username']),
-  //                   onTap: () {
-  //                     Navigator.push(
-  //                       context,
-  //                       MaterialPageRoute(
-  //                         builder: (context) =>
-  //                             ComplaintsFromUserPage(userId: user.id),
-  //                       ),
-  //                     );
-  //                   },
-  //                 ))
-  //             .toList(),
-  //       );
-  //     },
-  //   );
-  // }
-  // Color _getStatusColor(String status) {
-  //   List<Color> colors = [
-  //     Colors.blue,
-  //     Colors.orange,
-  //     Colors.green,
-  //     Colors.red,
-  //     Colors.purple
-  //   ];
-  //   return colors[status.hashCode % colors.length];
-  // }
 }
-//
-// class ComplaintsFromUserPage extends StatelessWidget {
-//   final String userId;
-//
-//   const ComplaintsFromUserPage({Key? key, required this.userId})
-//       : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Complaints from User'),
-//       ),
-//       body: StreamBuilder(
-//         stream: FirebaseFirestore.instance
-//             .collection('complaints')
-//             .where('userId', isEqualTo: userId)
-//             .snapshots(),
-//         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//           if (!snapshot.hasData) {
-//             return const Center(child: CircularProgressIndicator());
-//           }
-//
-//           List<QueryDocumentSnapshot> userComplaints = snapshot.data!.docs;
-//
-//           return ListView(
-//             children: userComplaints
-//                 .map((complaint) => ComplaintCard(complaint: complaint))
-//                 .toList(),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
 
 class ComplaintCard extends StatelessWidget {
   final QueryDocumentSnapshot complaint;

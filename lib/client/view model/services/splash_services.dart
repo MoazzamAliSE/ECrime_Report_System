@@ -12,19 +12,15 @@ class SplashServices {
   static checkIsLogin() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-
-    bool admin=true;
-
-
+    bool admin = false;
 
     // if (preferences.getString('type')=='admin')
-    if(admin)
-    {
+    if (admin) {
       Timer(const Duration(seconds: 2), () {
         if (preferences.getString('token') != null) {
-          Get.offAll(AdminHomePage());
+          Get.offAll(const AdminHomePage());
         } else {
-          Get.offAll(LoginPageAdmin());
+          Get.offAll(const LoginPageAdmin());
         }
       });
     } else {

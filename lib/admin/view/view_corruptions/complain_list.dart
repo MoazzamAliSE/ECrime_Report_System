@@ -37,9 +37,17 @@ class _ComplainListState extends State<ComplainList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Submit at: ${snapshot.child('incidentDateTime').value.toString()}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      const Text(
+                        'Submit at:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        ' ${snapshot.child('incidentDateTime').value.toString()}',
+                        // style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   Row(
                     children: [

@@ -1,13 +1,4 @@
-import 'package:ecrime/admin/view%20model/controller/signIn_admin_controller.dart';
-import 'package:ecrime/admin/view/admin_home/admin_home.dart';
-import 'package:ecrime/admin/view/authentication/signup_admin/sign_up.dart';
-import 'package:ecrime/admin/view/view_admin_barrel.dart';
-import 'package:ecrime/client/data/network/firebase_services.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
-import 'package:ecrime/client/widgets/generic_text_form_field.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class LoginPageAdmin extends StatefulWidget {
@@ -18,8 +9,8 @@ class LoginPageAdmin extends StatefulWidget {
 }
 
 class _LoginPageAdminState extends State<LoginPageAdmin> {
-  final controller=Get.put(SigninAdminController());
-  final _formKey=GlobalKey<FormState>();
+  final controller = Get.put(SigninAdminController());
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +31,9 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const SizedBox(height: 10),
+                    const ImageLogoAuth(),
+                    const SizedBox(height: 50),
                     _buildEmailField(),
                     const SizedBox(height: 10),
                     _buildPasswordField(),
@@ -75,40 +69,45 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
     );
   }
 
-   _buildLoginButton() {
+  _buildLoginButton() {
     return SizedBox(
       width: 150,
       height: 45,
       child: ElevatedButton(
-        onPressed:controller.loading.value ? null : () {
-          if(_formKey.currentState!.validate()){
-            FirebaseServices.signInAdminAccount();
-          }
-        },
-        child: Obx(() => controller.loading.value ? Center(child: const CircularProgressIndicator()) : const Text('Login'),)
-      ),
+          onPressed: controller.loading.value
+              ? null
+              : () {
+                  if (_formKey.currentState!.validate()) {
+                    FirebaseServices.signInAdminAccount();
+                  }
+                },
+          child: Obx(
+            () => controller.loading.value
+                ? const Center(child: CircularProgressIndicator())
+                : const Text('Login'),
+          )),
     );
   }
 
-   _buildPasswordField() {
+  _buildPasswordField() {
     return Obx(() => GenericTextField(
-      controller: controller.userPassword,
-      labelText: 'Password',
-      hintText: 'Enter your password',
-      prefixIcon: const Icon(Icons.lock),
-      obscureText: controller.obscurePassword.value,
-      suffixIcon: GestureDetector(
-          onTap: () => controller.obscurePassword.toggle(),
-          child: const Icon(Icons.visibility)),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Password is required';
-        } else if (value.length < 6) {
-          return 'Password must be at least 6 characters';
-        }
-        return null;
-      },
-    ));
+          controller: controller.userPassword,
+          labelText: 'Password',
+          hintText: 'Enter your password',
+          prefixIcon: const Icon(Icons.lock),
+          obscureText: controller.obscurePassword.value,
+          suffixIcon: GestureDetector(
+              onTap: () => controller.obscurePassword.toggle(),
+              child: const Icon(Icons.visibility)),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Password is required';
+            } else if (value.length < 6) {
+              return 'Password must be at least 6 characters';
+            }
+            return null;
+          },
+        ));
   }
 
   GenericTextField _buildEmailField() {
@@ -130,19 +129,3 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
     );
   }
 }
-
-// class HomeScreenAdmin extends StatelessWidget {
-//   const HomeScreenAdmin({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Admin Home Page'),
-//       ),
-//       body: const Center(
-//         child: Text('Welcome, Admin!'),
-//       ),
-//     );
-//   }
-// }

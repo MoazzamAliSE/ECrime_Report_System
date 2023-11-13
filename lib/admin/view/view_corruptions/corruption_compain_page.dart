@@ -29,58 +29,62 @@ class CorruptionComplainPage extends StatelessWidget {
           itemBuilder: (context, snapshot, animation, index) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: InkWell(
-                onTap: () => Get.to(ComplainList(
-                    type: type,
-                    email: snapshot.child('email').value.toString())),
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl:
-                              snapshot.child('profilePicture').value.toString(),
-                          imageBuilder: (context, imageProvider) {
-                            return CircleAvatar(
-                              radius: 25,
-                              backgroundImage: imageProvider,
-                            );
-                          },
-                          placeholder: (context, url) {
-                            return Center(
-                              child: SizedBox(
-                                height: 15,
-                                width: 15,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    color: AppColor.primaryColor,
+              child: Card(
+                child: InkWell(
+                  onTap: () => Get.to(ComplainList(
+                      type: type,
+                      email: snapshot.child('email').value.toString())),
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: snapshot
+                                .child('profilePicture')
+                                .value
+                                .toString(),
+                            imageBuilder: (context, imageProvider) {
+                              return CircleAvatar(
+                                radius: 25,
+                                backgroundImage: imageProvider,
+                              );
+                            },
+                            placeholder: (context, url) {
+                              return Center(
+                                child: SizedBox(
+                                  height: 15,
+                                  width: 15,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.primaryColor,
+                                    ),
                                   ),
                                 ),
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                snapshot.child('email').value.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, height: 0),
                               ),
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              snapshot.child('email').value.toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, height: 0),
-                            ),
-                            Text(
-                              snapshot.child('name').value.toString(),
-                              style: const TextStyle(height: 0),
-                            ),
-                          ],
-                        )
-                      ],
+                              Text(
+                                snapshot.child('name').value.toString(),
+                                style: const TextStyle(height: 0),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

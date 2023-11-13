@@ -46,7 +46,8 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'FIR Number ${widget.snapshot.child('key').value.toString().substring(0, 4)}'),
+            'FIR Number ${widget.snapshot.child('firNumber').value.toString()}'),
+        // 'FIR Number ${widget.snapshot.child('key').value.toString().substring(0, 4)}'
       ),
       body: BackgroundFrame(
         child: Padding(
