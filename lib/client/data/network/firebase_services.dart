@@ -173,6 +173,7 @@ class FirebaseServices {
       'name': registerFirController.model.value.name,
       'firNumber' : Random().nextInt(300).toString(),
       'assignTo' : 'No One',
+      'progress' : 0.0,
       'phoneNumber': registerFirController.model.value.phoneNumber,
       'address': registerFirController.model.value.address,
       'fatherName': registerFirController.model.value.fathersName,

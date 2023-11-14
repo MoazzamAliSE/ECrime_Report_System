@@ -56,101 +56,165 @@ class _StatusPageState extends State<StatusPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: FirebaseAnimatedList(
+            defaultChild: Center(
+              child: SizedBox(
+                height: 15,
+                width: 15,
+                child: CircularProgressIndicator(
+                  color: AppColor.primaryColor,
+                ),
+              ),
+            ),
             query: FirebaseDatabase.instance.ref('Firs'),
             itemBuilder: (context, snapshot, animation, index) {
-              if (snapshot.child('email').value.toString() ==
-                  FirebaseAuth.instance.currentUser!.email) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Material(
-                    color: AppColor.backgroundColor,
-                    child: InkWell(
-                      onTap: () {
-                        Get.to(StatusResultPage(
-                          firStatus: snapshot.child('status').value.toString(),
-                          progressPercentage: .50, // yaha par change karna...
-                        ));
-                      },
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    'Fir Number: ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                  Text(snapshot
-                                      .child('firNumber')
-                                      .value
-                                      .toString()),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    'Submitted at: ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                  Text(snapshot
-                                      .child('incidentDateTime')
-                                      .value
-                                      .toString()
-                                      .substring(
-                                          0,
-                                          snapshot
-                                              .child('incidentDateTime')
-                                              .value
-                                              .toString()
-                                              .indexOf(' -'))),
-                                ],
-                              ),
-                              const Text(
-                                'Description: ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
-                              Text(
-                                  ' ${snapshot.child('incidentDetails').value.toString()}'),
-                              const Text(
-                                'Assign to: ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
-                              Text(
-                                  ' ${snapshot.child('assignTo').value.toString()}'),
-                              Row(
-                                children: [
-                                  const Text(
-                                    'Current Status : ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                  Text(snapshot
-                                      .child('status')
-                                      .value
-                                      .toString()),
-                                ],
-                              ),
-                            ],
+              if(snapshot.children.isNotEmpty){
+                 if (snapshot.child('email').value.toString() ==
+                    FirebaseAuth.instance.currentUser!.email) {
+                  return Padding(
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Material(
+                      color: AppColor.backgroundColor,
+                      child: InkWell(
+                        onTap: () {
+                          Get.to(StatusResultPage(
+                            firStatus: snapshot.child('status').value.toString(),
+                            progressPercentage: double.parse(snapshot.child('progress').value.toString()), // yaha par change karna...
+                          ));
+                        },
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Fir Number: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    Text(snapshot
+                                        .child('firNumber')
+                                        .value
+                                        .toString()),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Submitted at: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    Text(snapshot
+                                        .child('incidentDateTime')
+                                        .value
+                                        .toString()
+                                        .substring(
+                                        0,
+                                        snapshot
+                                            .child('incidentDateTime')
+                                            .value
+                                            .toString()
+                                            .indexOf(' -'))),
+                                  ],
+                                ),
+                                const Text(
+                                  'Description: ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 18),
+                                ),
+                                Text(
+                                    ' ${snapshot.child('incidentDetails').value.toString()}'),
+                                const Text(
+                                  'Assign to: ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 18),
+                                ),
+                                Text(
+                                    ' ${snapshot.child('assignTo').value.toString()}'),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Current Status : ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    Text(snapshot
+                                        .child('status')
+                                        .value
+                                        .toString()),
+
+
+
+
+
+                                  ],
+                                ),
+
+                                // if(snapshot
+                                //     .child('status')
+                                //     .value
+                                //     .toString()=='In Progress')
+                                //
+                                //   Center(
+                                //     child: SizedBox(
+                                //       height: 5,
+                                //       width: 150,
+                                //       child: Column(
+                                //         children: [
+                                //           Row(
+                                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //             children: [
+                                //               Text('Progress',style: TextStyle(
+                                //                 fontWeight: FontWeight.bold,
+                                //               ),),
+                                //               Text(((int.parse(snapshot
+                                //                   .child('progress')
+                                //                   .value.toString()))*100).toString(),style: TextStyle(
+                                //
+                                //               ),)
+                                //             ],
+                                //           ),
+                                //           LinearProgressIndicator(
+                                //               value: double.parse(snapshot
+                                //                   .child('progress')
+                                //                   .value.toString())
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ),
+                                //   )
+
+
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              } else {
-                return Container();
+                  );
+                } else {
+                  return Container();
+                }
               }
+              
+              
+              return Center(
+                child: SizedBox(
+                  height: 15,
+                  width: 15,
+                   child: CircularProgressIndicator(
+                     color: AppColor.primaryColor,
+                   ),
+                ),
+              );
+              
             },
           ),
         ),

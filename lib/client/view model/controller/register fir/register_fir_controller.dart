@@ -31,7 +31,6 @@ class RegisterFirController extends GetxController {
         list.add(element.child('name').value.toString());
 
       });
-      print('dfsrtewrd efa '+value.snapshot.value.toString());
       stationList.value=list;
 
     });
@@ -63,7 +62,7 @@ class RegisterFirController extends GetxController {
   picEvidenceDoc() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'docx'],
+      allowedExtensions: ['pdf'],
       allowMultiple: false,
     );
 

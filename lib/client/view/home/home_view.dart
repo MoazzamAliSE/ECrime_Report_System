@@ -1,6 +1,7 @@
 import 'package:ecrime/client/utils/utils.dart';
 import 'package:ecrime/client/view/complain_corruption/complain_corruption.dart';
 import 'package:ecrime/client/view/home/components/investigators.dart';
+import 'package:ecrime/client/view/search%20station/search_police_station.dart';
 import 'package:ecrime/client/view/status/status_view.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
@@ -171,8 +172,11 @@ class HomeScreenClient extends StatelessWidget {
             svgIcon: policeStation,
             text: "Find Police Station",
             onTap: () {
-              Utils.showSnackBar('Warnind', 'Not Implement yet',
-                  const Icon((Icons.warning_amber)));
+              // Utils.showSnackBar('Warnind', 'Not Implement yet',
+              //     const Icon((Icons.warning_amber)));
+
+              Get.to(SearchPoliceStation());
+
             },
           ),
         ),

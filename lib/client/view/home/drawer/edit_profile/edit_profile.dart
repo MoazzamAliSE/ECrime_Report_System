@@ -3,6 +3,8 @@ import 'package:ecrime/client/View/widgets/widgets_barrel.dart';
 import 'package:ecrime/client/view%20model/controller/editProfile_controller/editProfileController.dart';
 import 'package:get/get.dart';
 
+import '../../../../utils/utils.dart';
+
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
 
@@ -123,8 +125,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 // ),
                 const SizedBox(height: 20),
                 ElevatedButton(
+                  // onPressed: () {
+                  //   controller.upDateData();
+                  // },
                   onPressed: () {
-                    controller.upDateData();
+                    Utils.showSnackBar('Warning', 'You can\'t change you profile beacuse of security reasons', Icon(Icons.warning_amber));
                   },
                   child: const Text('Save Changes'),
                 ),

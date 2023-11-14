@@ -18,7 +18,7 @@ class ComplainController extends GetxController{
   picEvidence() async {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'mp4' 'pdf' 'doc' 'docx'],
+        allowedExtensions: ['jpg', 'png', 'pdf'],
         allowMultiple: false,
       );
 

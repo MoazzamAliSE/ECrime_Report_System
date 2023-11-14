@@ -24,6 +24,15 @@ class CorruptionComplainPage extends StatelessWidget {
       ),
       body: BackgroundFrame(
         child: FirebaseAnimatedList(
+          defaultChild: Center(
+            child: SizedBox(
+              height: 15,
+              width: 15,
+              child: CircularProgressIndicator(
+                color: AppColor.primaryColor,
+              ),
+            ),
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           query: FirebaseDatabase.instance.ref('Complains').child(type),
           itemBuilder: (context, snapshot, animation, index) {

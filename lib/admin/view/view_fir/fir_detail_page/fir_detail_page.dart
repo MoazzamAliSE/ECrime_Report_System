@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecrime/admin/view%20model/controller/assign_fir_controller.dart';
 import 'package:ecrime/admin/view/view_admin_barrel.dart';
 import 'package:ecrime/admin/view/view_fir/fir_detail_page/pdfViewer.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
@@ -8,7 +9,10 @@ import 'package:get/get.dart';
 class FIRDetailPage extends StatefulWidget {
   final DataSnapshot snapshot;
 
-  const FIRDetailPage({super.key, required this.snapshot});
+   FIRDetailPage({super.key, required this.snapshot}){
+    final controller=Get.put(AssignFirController());
+    controller.selectedString.value=snapshot.child('assignTo').value.toString();
+  }
 
   @override
   State<FIRDetailPage> createState() => _FIRDetailPageState();
@@ -18,6 +22,7 @@ class _FIRDetailPageState extends State<FIRDetailPage>
     with WidgetsBindingObserver {
   late VideoPlayerController _controller;
   ChewieController? _chewieController;
+  final controller=Get.put(AssignFirController());
   @override
   void initState() {
     // TODO: implement initState
@@ -85,6 +90,21 @@ class _FIRDetailPageState extends State<FIRDetailPage>
                                   .indexOf(' -'))),
                     ],
                   ),
+
+
+                  Row(
+                    children: [
+                      const Text(
+                        'Assign to: ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      Obx(() => Text(controller.selectedString.value
+                      ),)
+                    ],
+                  ),
+
+
                   const Text(
                     'Description: ',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -104,11 +124,11 @@ class _FIRDetailPageState extends State<FIRDetailPage>
                           backgroundColor: Colors.grey[300],
                           valueColor:
                               const AlwaysStoppedAnimation<Color>(Colors.green),
-                          value: .5,
+                          value: double.parse(widget.snapshot.child('progress').value.toString()),
                         ),
                       ),
                       Text(
-                        ' ${(.5 * 100).toStringAsFixed(1)}%',
+                        ' ${(double.parse(widget.snapshot.child('progress').value.toString()) * 100).toStringAsFixed(1)}%',
                         style: const TextStyle(fontSize: 16.0),
                       ),
                     ],
@@ -122,7 +142,75 @@ class _FIRDetailPageState extends State<FIRDetailPage>
                   fileWidget(),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                              title: const Text('Select officer'),
+                              content: Obx(
+                                    () => SizedBox(
+                                  height: 120,
+                                  child: Column(
+                                    children: [
+                                      DropdownButton<String>(
+                                        value: controller
+                                            .selectedOfficer.value,
+                                        hint:
+                                        const Text('Select Officer'),
+                                        onChanged: (String? newValue) {
+                                          controller.selectedOfficer
+                                              .value = newValue!;
+                                        },
+                                        items: <String>[
+                                          'Moazzam - SHO',
+                                          'Talha - Inspector',
+                                          'Furqan - Sub Inspector',
+                                          'Ali - DSP',
+                                          'Babar - ASP',
+                                          'Zeeshan - SP',
+                                          'Zulqarnain - SSP',
+                                          'Other',
+                                        ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: TextButton(
+                                          child: const Text('Assign'),
+                                          onPressed: () {
+                                            FirebaseDatabase.instance
+                                                .ref('Firs')
+                                                .child(widget.snapshot
+                                                .child('key')
+                                                .value
+                                                .toString())
+                                                .update({
+                                              'assignTo': controller
+                                                  .selectedOfficer.value
+                                            }).then((value) {
+                                              controller.selectedString.value=controller.selectedOfficer.value;
+                                              Get.back();
+
+                                            });
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ));
+                        },
+                      );
+                    },
                     child: const Text('Assign FIR'),
                   ),
                 ],
@@ -139,17 +227,13 @@ class _FIRDetailPageState extends State<FIRDetailPage>
     if (url.contains('jpg') || url.contains('png') || url.contains('jpeg')) {
       return CachedNetworkImage(
         imageUrl: url,
-        placeholder: (context, url) => Padding(
-          padding: const EdgeInsets.all(50),
-          child: SizedBox(
-              height: 15,
-              width: 15,
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: AppColor.primaryColor,
-                ),
-              )),
-        ),
+        placeholder: (context, url) => SizedBox(
+
+            child: Center(
+              child: CircularProgressIndicator(
+                color: AppColor.primaryColor,
+              ),
+            )),
         imageBuilder: (context, imageProvider) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -166,13 +250,16 @@ class _FIRDetailPageState extends State<FIRDetailPage>
           child: Chewie(
             controller: _chewieController!,
           ));
-    } else {
+    } else if(url.contains('pdf')) {
       return TextButton(
           onPressed: () {
             Get.to(PDFViewerView(url: url));
           },
           child: const Text('Evidence is a document. Tap for view'));
+    }else {
+      return Text('No Evidence Available');
     }
+
   }
 
   @override

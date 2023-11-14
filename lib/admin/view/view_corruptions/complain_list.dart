@@ -26,6 +26,15 @@ class _ComplainListState extends State<ComplainList> {
       ),
       body: BackgroundFrame(
         child: FirebaseAnimatedList(
+          defaultChild: Center(
+            child: SizedBox(
+              height: 15,
+              width: 15,
+              child: CircularProgressIndicator(
+                color: AppColor.primaryColor,
+              ),
+            ),
+          ),
           query: FirebaseDatabase.instance
               .ref('Complains')
               .child(widget.type)
@@ -128,19 +137,19 @@ class _ComplainListState extends State<ComplainList> {
                         },
                       ),
                     ),
-                  if (snapshot
-                      .child('evidenceUrl')
-                      .value
-                      .toString()
-                      .contains('pdf'))
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        height: 250,
-                        color: Colors.red,
-                        width: MediaQuery.sizeOf(context).width,
-                      ),
-                    ),
+                  // if (snapshot
+                  //     .child('evidenceUrl')
+                  //     .value
+                  //     .toString()
+                  //     .contains('pdf'))
+                  //   ClipRRect(
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     child: Container(
+                  //       height: 250,
+                  //       color: Colors.red,
+                  //       width: MediaQuery.sizeOf(context).width,
+                  //     ),
+                  //   ),
                   if (snapshot
                       .child('evidenceUrl')
                       .value

@@ -28,6 +28,15 @@ class _AssignFIRPageState extends State<AssignFIRPage> {
       ),
       body: BackgroundFrame(
         child: FirebaseAnimatedList(
+          defaultChild: Center(
+            child: SizedBox(
+              height: 15,
+              width: 15,
+              child: CircularProgressIndicator(
+                color: AppColor.primaryColor,
+              ),
+            ),
+          ),
           query: FirebaseDatabase.instance.ref('Firs'),
           itemBuilder: (context, snapshot, animation, index) {
             return Padding(

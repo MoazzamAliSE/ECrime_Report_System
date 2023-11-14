@@ -2,6 +2,8 @@ import 'package:ecrime/admin/view/view_admin_barrel.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 
+import '../../../constants.dart';
+
 class SuggestionAdmin extends StatelessWidget {
   const SuggestionAdmin({super.key});
 
@@ -14,6 +16,15 @@ class SuggestionAdmin extends StatelessWidget {
       ),
       body: BackgroundFrame(
         child: FirebaseAnimatedList(
+          defaultChild: Center(
+            child: SizedBox(
+              height: 15,
+              width: 15,
+              child: CircularProgressIndicator(
+                color: AppColor.primaryColor,
+              ),
+            ),
+          ),
           query: FirebaseDatabase.instance.ref('Suggestions'),
           itemBuilder: (context, snapshot, animation, index) {
             return Padding(

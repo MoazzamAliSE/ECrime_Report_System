@@ -13,6 +13,7 @@ class GenericTextField extends StatelessWidget {
   final int? minLines;
   final bool? enabled;
   final String? value;
+  final VoidCallback? onChanged;
   FormFieldSetter<String>? onSaved;
   final FormFieldValidator<String>? validator;
 
@@ -30,7 +31,7 @@ class GenericTextField extends StatelessWidget {
     this.minLines = 1,
     this.enabled = true,
     this.onSaved,
-    this.validator, this.value,
+    this.validator, this.value, this.onChanged,
   }) : super(key: key);
 
   @override

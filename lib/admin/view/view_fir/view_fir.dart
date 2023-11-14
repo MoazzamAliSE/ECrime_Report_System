@@ -27,54 +27,65 @@ class _ViewFIRsPageState extends State<ViewFIRsPage> {
         padding: const EdgeInsets.all(16.0),
         child: FirebaseAnimatedList(
           query: FirebaseDatabase.instance.ref('Firs'),
+          defaultChild: Center(
+            child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(
+              color: AppColor.primaryColor,
+            ),),
+          ),
           itemBuilder: (context, snapshot, animation, index) {
-            return SizedBox(
-              width: MediaQuery.sizeOf(context).width,
-              // width: 300,
-              // height: 70,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  child: ListTile(
-                    onTap: () {
-                      Get.to(FIRDetailPage(snapshot: snapshot));
-                    },
-                    leading: SizedBox(
-                      width: 56,
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            snapshot.child('profileImage').value.toString(),
-                        imageBuilder: (context, imageProvider) {
-                          return CircleAvatar(
-                            radius: 25,
-                            backgroundImage: imageProvider,
-                          );
-                        },
-                        placeholder: (context, url) {
-                          return Center(
-                            child: SizedBox(
-                              height: 15,
-                              width: 15,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: AppColor.primaryColor,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    title: Text(
-                      'FIR Number ${snapshot.child('firNumber').value.toString()}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                        'Submitted at ${snapshot.child('incidentDateTime').value.toString().substring(0, snapshot.child('incidentDateTime').value.toString().indexOf(' -'))}'),
-                  ),
-                ),
-              ),
-            );
+           if(snapshot.children.isNotEmpty){
+             return SizedBox(
+               width: MediaQuery.sizeOf(context).width,
+               // width: 300,
+               // height: 70,
+               child: Padding(
+                 padding: const EdgeInsets.all(8.0),
+                 child: Card(
+                   child: ListTile(
+                     onTap: () {
+                       Get.to(FIRDetailPage(snapshot: snapshot));
+                     },
+                     leading: SizedBox(
+                       width: 56,
+                       child: CachedNetworkImage(
+                         imageUrl:
+                         snapshot.child('profileImage').value.toString(),
+                         imageBuilder: (context, imageProvider) {
+                           return CircleAvatar(
+                             radius: 25,
+                             backgroundImage: imageProvider,
+                           );
+                         },
+                         placeholder: (context, url) {
+                           return Center(
+                             child: SizedBox(
+                               height: 15,
+                               width: 15,
+                               child: Center(
+                                 child: CircularProgressIndicator(
+                                   color: AppColor.primaryColor,
+                                 ),
+                               ),
+                             ),
+                           );
+                         },
+                       ),
+                     ),
+                     title: Text(
+                       'FIR Number ${snapshot.child('firNumber').value.toString()}',
+                       style: const TextStyle(fontWeight: FontWeight.bold),
+                     ),
+                     subtitle: Text(
+                         'Submitted at ${snapshot.child('incidentDateTime').value.toString().substring(0, snapshot.child('incidentDateTime').value.toString().indexOf(' -'))}'),
+                   ),
+                 ),
+               ),
+             );
+           }else{
+             return SizedBox(height: 15,width: 15,child: CircularProgressIndicator(
+               color: AppColor.primaryColor,
+             ),);
+           }
           },
         ),
       )),

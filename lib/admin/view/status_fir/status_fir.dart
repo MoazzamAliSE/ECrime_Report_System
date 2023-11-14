@@ -4,7 +4,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
+import '../../../constants.dart';
 import '../view_fir/fir_detail_page/fir_detail_page.dart';
 
 class ManageFIRStatusPage extends StatelessWidget {
@@ -18,6 +20,11 @@ class ManageFIRStatusPage extends StatelessWidget {
       ),
       body: BackgroundFrame(
         child: FirebaseAnimatedList(
+          defaultChild: Center(
+            child: SizedBox(height: 15,width: 15,child: CircularProgressIndicator(
+              color: AppColor.primaryColor,
+            ),),
+          ),
           query: FirebaseDatabase.instance.ref('Firs'),
           itemBuilder: (context, snapshot, animation, index) {
             return Padding(
@@ -69,17 +76,19 @@ class ManageFIRStatusPage extends StatelessWidget {
                       ),
                       Text(' ${snapshot.child('assignTo').value.toString()}'),
                       const SizedBox(height: 10),
-                      const Row(
+                       Row(
                         children: [
                           Text(
                             'Current Progress : ',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
-                          Text("50%"), //yaha
+                          Text(((double.parse(snapshot.child('progress').value.toString())*100).toStringAsFixed(1))), //yaha
                         ],
                       ),
-                      const SwipeableProgressIndicator(),
+                       SwipeableProgressIndicator(progress: double.parse(snapshot.child('progress').value.toString()), firKey:
+                       snapshot.child('key').value.toString()
+                         ,),
                       Row(
                         children: [
                           const Text(
@@ -144,7 +153,42 @@ class ManageFIRStatusPage extends StatelessWidget {
                               },
                               label: const Text('Progress')),
                         ],
-                      )
+                      ),
+
+                      // if(snapshot
+                      //     .child('status')
+                      //     .value
+                      //     .toString()=='In Progress')
+                      //
+                      //   Center(
+                      //     child: SizedBox(
+                      //       height: 5,
+                      //       width: 150,
+                      //       child: Column(
+                      //         children: [
+                      //           Row(
+                      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //             children: [
+                      //               Text('Progress',style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //               ),),
+                      //               Text(((int.parse(snapshot
+                      //                   .child('progress')
+                      //                   .value.toString()))*100).toString(),style: TextStyle(
+                      //
+                      //               ),)
+                      //             ],
+                      //           ),
+                      //           LinearProgressIndicator(
+                      //               value: double.parse(snapshot
+                      //                   .child('progress')
+                      //                   .value.toString())
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   )
+
                     ],
                   ),
                 ),
@@ -158,8 +202,9 @@ class ManageFIRStatusPage extends StatelessWidget {
 }
 
 class SwipeableProgressIndicator extends StatefulWidget {
-  const SwipeableProgressIndicator({super.key});
-
+  const SwipeableProgressIndicator({super.key, required this.progress, required this.firKey});
+  final double progress;
+  final String firKey;
   @override
   _SwipeableProgressIndicatorState createState() =>
       _SwipeableProgressIndicatorState();
@@ -167,7 +212,9 @@ class SwipeableProgressIndicator extends StatefulWidget {
 
 class _SwipeableProgressIndicatorState
     extends State<SwipeableProgressIndicator> {
-  double _progress = 0.5; // Initial progress value (between 0 and 1)
+   // Initial progress value (between 0 and 1)
+
+  final double _progress=0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -176,15 +223,51 @@ class _SwipeableProgressIndicatorState
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Progress: ${(_progress * 100).toStringAsFixed(2)}%',
+            'Progress: ${(widget.progress * 100).toStringAsFixed(2)}%',
             style: const TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 5),
           Slider(
-            value: _progress,
+            value: widget.progress,
+
+            onChangeEnd: (value) {
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  title: Text('Progress Update'),
+                  content: Text('This Fir progress is updated to ${(value * 100).toStringAsFixed(1)}%'),
+                  actions: [
+                    TextButton(onPressed: () {
+                      Get.back();
+                    }, child: Text('Ok'))
+                  ],
+                );
+              },);
+            },
+
+            // onChangeStart: (value) {
+            //   showDialog(context: context, builder: (context) {
+            //     return AlertDialog(
+            //       title: Text('Warning'),
+            //       content: Text('This action will update the current progress of this fir'),
+            //       actions: [
+            //
+            //         TextButton(onPressed: () {
+            //           Get.back();
+            //         }, child: Text('Ok'))
+            //       ],
+            //     );
+            //   },);
+            // },
+
             onChanged: (value) {
+              FirebaseDatabase.instance.ref('Firs').child(widget.firKey).update({
+                'status': 'In Progress',
+              });
+              FirebaseDatabase.instance.ref('Firs').child(widget.firKey).update({
+                'progress': value,
+              });
               setState(() {
-                _progress = value;
+                // _progress = value;
               });
             },
             activeColor: Colors.green, // Set the progress color to green
