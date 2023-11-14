@@ -19,7 +19,6 @@ class SignUpAdminController extends GetxController{
 
 
   createAccount() {
-    print('d');
     FirebaseServices.createAdminAccount('admin');
   }
 }

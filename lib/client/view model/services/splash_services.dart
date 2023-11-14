@@ -12,7 +12,7 @@ class SplashServices {
   static checkIsLogin() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    bool admin = true;
+    bool admin = false;
 
     // if (preferences.getString('type')=='admin')
     if (admin) {

@@ -15,7 +15,7 @@ class SigninAdminController extends GetxController{
   }
 
   signIn() async {
-    FirebaseServices.signInAccount();
+    FirebaseServices.signInAdminAccount();
   }
 }
 

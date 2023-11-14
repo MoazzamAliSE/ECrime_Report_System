@@ -68,8 +68,9 @@ class _StatusPageState extends State<StatusPage> {
             query: FirebaseDatabase.instance.ref('Firs'),
             itemBuilder: (context, snapshot, animation, index) {
               if(snapshot.children.isNotEmpty){
-                 if (snapshot.child('email').value.toString() ==
-                    FirebaseAuth.instance.currentUser!.email) {
+
+                 if (snapshot.child('email').value.toString().toLowerCase() ==
+                    FirebaseAuth.instance.currentUser!.email!.toLowerCase()) {
                   return Padding(
                     padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

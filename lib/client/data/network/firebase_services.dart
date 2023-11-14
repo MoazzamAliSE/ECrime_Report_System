@@ -101,13 +101,14 @@ class FirebaseServices {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      final String email = value.user!.email!;
+
       FirebaseDatabase.instance
           .ref('Accounts')
           .child('ClientAccounts')
           .child(email.substring(0, email.indexOf('@')))
           .once()
           .then((value) {
+
 
             if(value.snapshot.child('type').value.toString()=='client'){
               final userSnapshot = value.snapshot;
@@ -121,10 +122,11 @@ class FirebaseServices {
                 'token': userSnapshot.child('token').value.toString(),
                 'type': userSnapshot.child('type').value.toString(),
               });
-              Get.offAllNamed(RoutesName.home);
               Utils.showSnackBar('Success', 'Successfully Login to your account',
                   const Icon(Icons.done_all));
               signInController.loading.value = false;
+              Get.offAllNamed(RoutesName.home);
+
             }else{
               FirebaseAuth.instance.signOut();
               signInController.loading.value = false;
@@ -274,10 +276,12 @@ class FirebaseServices {
         controlller.detail.clear();
         controlller.evidenceName.value='';
         controlller.evidence.value='';
+        Get.off(()=>HomeScreenClient());
         }).onError((error, stackTrace) {
         Utils.showSnackBar('Error', 'Something went wrong try again',
         const Icon(Icons.warning_amber));
         controlller.loading.value = false;
+
         });
       });
     })
@@ -350,7 +354,6 @@ class FirebaseServices {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      final String email = value.user!.email!;
       FirebaseDatabase.instance
           .ref('Accounts')
           .child('AdminAccounts')

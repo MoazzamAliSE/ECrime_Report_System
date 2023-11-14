@@ -83,7 +83,10 @@ class _LoginPageAdminState extends State<LoginPageAdmin> {
                 },
           child: Obx(
             () => controller.loading.value
-                ? const Center(child: CircularProgressIndicator())
+                ? SizedBox(
+                height: 15,
+                width: 15,
+                child: const Center(child: CircularProgressIndicator()))
                 : const Text('Login'),
           )),
     );
