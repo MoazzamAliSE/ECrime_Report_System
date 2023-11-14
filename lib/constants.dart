@@ -19,6 +19,9 @@ TextStyle appBarTextStyle = TextStyle(
     letterSpacing: 1,
     fontSize: 22,
     wordSpacing: 10);
+
+TextStyle smallHeadingTextStyle =
+    TextStyle(fontSize: 14, fontFamily: interBold);
 //fontFamily
 String interBold = "InterB";
 String interRegular = "InterR";

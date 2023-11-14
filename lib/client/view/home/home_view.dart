@@ -1,5 +1,6 @@
 import 'package:ecrime/client/utils/utils.dart';
 import 'package:ecrime/client/view/complain_corruption/complain_corruption.dart';
+import 'package:ecrime/client/view/home/components/investigators.dart';
 import 'package:ecrime/client/view/status/status_view.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
@@ -30,7 +31,14 @@ class HomeScreenClient extends StatelessWidget {
                   children: [
                     _buildHeadingText(),
                     const SizedBox(
-                      height: 66,
+                      height: 36,
+                    ),
+                    Divider(
+                      thickness: 2,
+                      color: AppColor.primaryColor,
+                    ),
+                    const SizedBox(
+                      height: 30,
                     ),
                     _buildUpperButtons(context),
                     const SizedBox(
@@ -78,15 +86,16 @@ class HomeScreenClient extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(
-                  child: CardButtonReport(
-                    svgIcon: regFir,
-                    text: 'Investigation Update',
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
+                // Expanded(
+
+                //   child: CardButtonReport(
+                //     svgIcon: regFir,
+                //     text: 'Investigation Update',
+                //     onTap: () {
+                //       Navigator.pop(context);
+                //     },
+                //   ),
+                // ),
                 Expanded(
                   child: CardButtonReport(
                     svgIcon: regFir,
@@ -101,7 +110,11 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Investigator',
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => InvestigatorsPage(),
+                          ));
                     },
                   ),
                 ),
@@ -153,30 +166,33 @@ class HomeScreenClient extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        CardButtonReportWhite(
-          svgIcon: policeStation,
-          text: "Find Police Station",
-          onTap: () {
-            Utils.showSnackBar('Warnind', 'Not Implement yet',
-                const Icon((Icons.warning_amber)));
-          },
+        Expanded(
+          child: CardButtonReportWhite(
+            svgIcon: policeStation,
+            text: "Find Police Station",
+            onTap: () {
+              Utils.showSnackBar('Warnind', 'Not Implement yet',
+                  const Icon((Icons.warning_amber)));
+            },
+          ),
         ),
-        CardButtonReportWhite(
-          svgIcon: generatePdf,
-          text: "Generate Report",
-          onTap: () {
-            Utils.showSnackBar('Warnind', 'Not Implement yet',
-                const Icon((Icons.warning_amber)));
-          },
+        Expanded(
+          child: CardButtonReportWhite(
+            svgIcon: generatePdf,
+            text: "Women Help",
+            onTap: () {
+              Get.to(WomenHelpPage());
+            },
+          ),
         ),
-        CardButtonReportWhite(
-          svgIcon: progress,
-          text: "Progress",
-          onTap: () {
-            Utils.showSnackBar('Warnind', 'Not Implement yet',
-                const Icon((Icons.warning_amber)));
-          },
-        ),
+        // CardButtonReportWhite(
+        //   svgIcon: progress,
+        //   text: "Progress",
+        //   onTap: () {
+        //     Utils.showSnackBar('Warnind', 'Not Implement yet',
+        //         const Icon((Icons.warning_amber)));
+        //   },
+        // ),
       ],
     );
   }

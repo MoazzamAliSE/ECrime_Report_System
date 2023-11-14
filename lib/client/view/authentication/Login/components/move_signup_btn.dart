@@ -11,7 +11,7 @@ class MoveSignUpButton extends StatelessWidget {
         const Text("Don't have an account?"),
         TextButton(
           onPressed: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const SignUpPageClient(),

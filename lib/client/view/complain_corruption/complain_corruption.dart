@@ -34,103 +34,106 @@ class _ComplainPageState extends State<ComplainPage> {
             : 'Complaint for Corruption'),
       ),
       body: BackgroundFrame(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.complainType == complainService
-                    ? 'Report Service'
-                    : 'Report Corruption',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.complainType == complainService
+                      ? 'Report Service'
+                      : 'Report Corruption',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Submit your complaint below:',
-                style: TextStyle(
-                  fontSize: 18, // You can adjust the size as needed
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 10),
+                const Text(
+                  'Submit your complaint below:',
+                  style: TextStyle(
+                    fontSize: 18, // You can adjust the size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Select Institute:',
-                style: TextStyle(
-                  fontSize: 18, // You can adjust the size as needed
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 20),
+                const Text(
+                  'Select Institute:',
+                  style: TextStyle(
+                    fontSize: 18, // You can adjust the size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              _buildDropdown(
-                'Select Institute',
-                institutesList,
-                (value) => controller.institute.value = value!,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Region',
-                style: TextStyle(
-                  fontSize: 18, // You can adjust the size as needed
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 10),
+                _buildDropdown(
+                  'Select Institute',
+                  institutesList,
+                  (value) => controller.institute.value = value!,
                 ),
-              ),
-              const SizedBox(height: 10),
-              _buildDropdown(
-                'Region',
-                pakistanProvinces,
-                (value) => controller.region.value = value!,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Enter Details:',
-                style: TextStyle(
-                  fontSize: 18, // You can adjust the size as needed
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 20),
+                const Text(
+                  'Region',
+                  style: TextStyle(
+                    fontSize: 18, // You can adjust the size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              GenericTextField(
-                hintText: widget.complainType == complainService
-                    ? 'Enter details about service...'
-                    : 'Enter details about corruption...',
-                maxLines: 4,
-                minLines: 4,
-                controller: controller.detail,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                  onPressed: () {
-                    controller.picEvidence();
-                  },
-                  child: Obx(() => controller.evidenceName.isEmpty
-                      ? const Text('Upload Document/Picture/Video')
-                      : Text(controller.evidenceName.value))),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 120,
-                height: 45,
-                child: ElevatedButton(
-                  onPressed: controller.loading.value
-                      ? null
-                      : () => controller.registerComplain(widget.complainType),
-                  child: Obx(() => controller.loading.value
-                      ? Center(
-                          child: SizedBox(
-                            height: 15,
-                            width: 15,
-                            child: CircularProgressIndicator(
-                              color: AppColor.primaryColor,
+                const SizedBox(height: 10),
+                _buildDropdown(
+                  'Region',
+                  pakistanProvinces,
+                  (value) => controller.region.value = value!,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Enter Details:',
+                  style: TextStyle(
+                    fontSize: 18, // You can adjust the size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                GenericTextField(
+                  hintText: widget.complainType == complainService
+                      ? 'Enter details about service...'
+                      : 'Enter details about corruption...',
+                  maxLines: 4,
+                  minLines: 4,
+                  controller: controller.detail,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                    onPressed: () {
+                      controller.picEvidence();
+                    },
+                    child: Obx(() => controller.evidenceName.isEmpty
+                        ? const Text('Upload Document/Picture/Video')
+                        : Text(controller.evidenceName.value))),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: 120,
+                  height: 45,
+                  child: ElevatedButton(
+                    onPressed: controller.loading.value
+                        ? null
+                        : () =>
+                            controller.registerComplain(widget.complainType),
+                    child: Obx(() => controller.loading.value
+                        ? Center(
+                            child: SizedBox(
+                              height: 15,
+                              width: 15,
+                              child: CircularProgressIndicator(
+                                color: AppColor.primaryColor,
+                              ),
                             ),
-                          ),
-                        )
-                      : const Text('Submit Complaint')),
+                          )
+                        : const Text('Submit Complaint')),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

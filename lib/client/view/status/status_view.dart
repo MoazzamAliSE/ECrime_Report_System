@@ -2,6 +2,7 @@ import 'package:ecrime/client/view/status/result_status.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:get/get.dart';
 
 class StatusPage extends StatefulWidget {
   const StatusPage({Key? key}) : super(key: key);
@@ -54,89 +55,108 @@ class _StatusPageState extends State<StatusPage> {
       body: BackgroundFrame(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: FirebaseAnimatedList(query: FirebaseDatabase.instance.ref('Firs'), itemBuilder: (context, snapshot, animation, index) {
-
-            if(snapshot.child('email').value.toString() ==FirebaseAuth.instance.currentUser!.email ){
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Fir Number: ',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          child: FirebaseAnimatedList(
+            query: FirebaseDatabase.instance.ref('Firs'),
+            itemBuilder: (context, snapshot, animation, index) {
+              if (snapshot.child('email').value.toString() ==
+                  FirebaseAuth.instance.currentUser!.email) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Material(
+                    color: AppColor.backgroundColor,
+                    child: InkWell(
+                      onTap: () {
+                        Get.to(StatusResultPage(
+                          firStatus: snapshot.child('status').value.toString(),
+                          progressPercentage: .50, // yaha par change karna...
+                        ));
+                      },
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Fir Number: ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  Text(snapshot
+                                      .child('firNumber')
+                                      .value
+                                      .toString()),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Submitted at: ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  Text(snapshot
+                                      .child('incidentDateTime')
+                                      .value
+                                      .toString()
+                                      .substring(
+                                          0,
+                                          snapshot
+                                              .child('incidentDateTime')
+                                              .value
+                                              .toString()
+                                              .indexOf(' -'))),
+                                ],
+                              ),
+                              const Text(
+                                'Description: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                              Text(
+                                  ' ${snapshot.child('incidentDetails').value.toString()}'),
+                              const Text(
+                                'Assign to: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                              Text(
+                                  ' ${snapshot.child('assignTo').value.toString()}'),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Current Status : ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  Text(snapshot
+                                      .child('status')
+                                      .value
+                                      .toString()),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(snapshot.child('firNumber').value.toString()),
-                      ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        const Text(
-                          'Submitted at: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        Text(snapshot
-                            .child('incidentDateTime')
-                            .value
-                            .toString()
-                            .substring(
-                            0,
-                            snapshot
-                                .child('incidentDateTime')
-                                .value
-                                .toString()
-                                .indexOf(' -'))),
-                      ],
-                    ),
-                    const Text(
-                      'Description: ',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-
-                    Text(
-                        ' ${snapshot.child('incidentDetails').value.toString()}'),
-                    const Text(
-                      'Assign to: ',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-
-                    Text(
-                        ' ${snapshot.child('assignTo').value.toString()}'),
-                    Row(
-                      children: [
-                        const Text(
-                          'Current Status : ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        Text(snapshot
-                            .child('status')
-                            .value
-                            .toString()),
-                      ],
-                    ),
-
-                  ],
-                ),
-              );
-            }else{
-              return Container();
-            }
-
-          },),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
         ),
       ),
     );
   }
-
-
-
-
-
-
 
   // void _showStatusPage(String firStatus) {
   //   Navigator.push(

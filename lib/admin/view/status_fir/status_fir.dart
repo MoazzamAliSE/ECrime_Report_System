@@ -69,6 +69,17 @@ class ManageFIRStatusPage extends StatelessWidget {
                       ),
                       Text(' ${snapshot.child('assignTo').value.toString()}'),
                       const SizedBox(height: 10),
+                      const Row(
+                        children: [
+                          Text(
+                            'Current Progress : ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          Text("50%"), //yaha
+                        ],
+                      ),
+                      const SwipeableProgressIndicator(),
                       Row(
                         children: [
                           const Text(
@@ -79,6 +90,7 @@ class ManageFIRStatusPage extends StatelessWidget {
                           Text(snapshot.child('status').value.toString()),
                         ],
                       ),
+                      const SizedBox(height: 10),
                       const Text(
                         'Update Status here',
                         style: TextStyle(
@@ -140,6 +152,44 @@ class ManageFIRStatusPage extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class SwipeableProgressIndicator extends StatefulWidget {
+  const SwipeableProgressIndicator({super.key});
+
+  @override
+  _SwipeableProgressIndicatorState createState() =>
+      _SwipeableProgressIndicatorState();
+}
+
+class _SwipeableProgressIndicatorState
+    extends State<SwipeableProgressIndicator> {
+  double _progress = 0.5; // Initial progress value (between 0 and 1)
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Progress: ${(_progress * 100).toStringAsFixed(2)}%',
+            style: const TextStyle(fontSize: 18),
+          ),
+          const SizedBox(height: 5),
+          Slider(
+            value: _progress,
+            onChanged: (value) {
+              setState(() {
+                _progress = value;
+              });
+            },
+            activeColor: Colors.green, // Set the progress color to green
+          ),
+        ],
       ),
     );
   }

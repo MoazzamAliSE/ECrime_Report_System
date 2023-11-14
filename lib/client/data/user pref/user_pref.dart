@@ -22,7 +22,7 @@ class UserPref {
       'userName': pref.getString('userName'),
       'fullName': pref.getString('fullName'),
       'profilePicture': pref.getString('profilePicture'),
-      'phoneNumber': pref.getString('profilePicture'),
+      'phoneNumber': pref.getString('phoneNumber'),
       'email': pref.getString('email'),
       'token': pref.getString('token'),
       'type': pref.getString('type'),

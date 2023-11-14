@@ -14,7 +14,8 @@ class FIRDetailPage extends StatefulWidget {
   State<FIRDetailPage> createState() => _FIRDetailPageState();
 }
 
-class _FIRDetailPageState extends State<FIRDetailPage> {
+class _FIRDetailPageState extends State<FIRDetailPage>
+    with WidgetsBindingObserver {
   late VideoPlayerController _controller;
   ChewieController? _chewieController;
   @override
@@ -39,6 +40,7 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
         aspectRatio: 16 / 9,
       );
     }
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -87,8 +89,30 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
                     'Description: ',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
+                  const SizedBox(
+                    height: 4,
+                  ),
                   Text(
                       ' ${widget.snapshot.child('incidentDetails').value.toString()}'),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          borderRadius: BorderRadius.circular(10),
+                          minHeight: 20,
+                          backgroundColor: Colors.grey[300],
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.green),
+                          value: .5,
+                        ),
+                      ),
+                      Text(
+                        ' ${(.5 * 100).toStringAsFixed(1)}%',
+                        style: const TextStyle(fontSize: 16.0),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 20),
                   const Text(
                     'Files:',
@@ -153,6 +177,18 @@ class _FIRDetailPageState extends State<FIRDetailPage> {
 
   @override
   void dispose() {
+    _chewieController?.dispose();
+    _controller.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _controller.pause();
+    } else if (state == AppLifecycleState.resumed) {
+      _controller.play();
+    }
   }
 }

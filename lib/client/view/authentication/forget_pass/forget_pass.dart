@@ -14,6 +14,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   late Timer _timer;
   int _remainingTime = 0;
   bool _showTimer = false;
+  @override
+  void initState() {
+    super.initState();
+    // Initialize _timer with a dummy Timer instance
+    _timer = Timer(const Duration(seconds: 1), () {});
+  }
 
   @override
   Widget build(BuildContext context) {

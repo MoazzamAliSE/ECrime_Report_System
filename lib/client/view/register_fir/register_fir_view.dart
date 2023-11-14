@@ -62,7 +62,10 @@ class _RegisterFIRState extends State<RegisterFIR> {
           key: _step1Key,
           child: Column(
             children: [
-              const Text('Victim Details'),
+              Text(
+                'Victim Details',
+                style: smallHeadingTextStyle,
+              ),
               _buildRadioButtons(
                 ['Myself', 'Someone Else', 'Both'],
                 (value) {
@@ -118,7 +121,10 @@ class _RegisterFIRState extends State<RegisterFIR> {
           key: _step2Key,
           child: Column(
             children: [
-              const Text('Incident Location'),
+              Text('Incident Location', style: smallHeadingTextStyle),
+              const SizedBox(
+                height: 10,
+              ),
               _buildDropdown(
                 'Incident District',
                 districtList,
@@ -131,11 +137,14 @@ class _RegisterFIRState extends State<RegisterFIR> {
                   _step2Key,
                   (value) => _validateField(value, 'Incident Address')),
               _buildDateTimePicker(),
-              Obx(() => _buildDropdown(
-                'Nearest Police Station',
-                controller.stationList,
-                    (value) => controller.model.value.nearestPoliceStation = value!,
-              ),),
+              Obx(
+                () => _buildDropdown(
+                  'Nearest Police Station',
+                  controller.stationList,
+                  (value) =>
+                      controller.model.value.nearestPoliceStation = value!,
+                ),
+              ),
             ],
           ),
         ),
@@ -148,7 +157,7 @@ class _RegisterFIRState extends State<RegisterFIR> {
           key: _step3Key,
           child: Column(
             children: [
-              const Text('Incident Details'),
+              Text('Incident Details', style: smallHeadingTextStyle),
               _buildTextFormField(
                   'Incident Subject',
                   (value) =>
@@ -177,12 +186,9 @@ class _RegisterFIRState extends State<RegisterFIR> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Evidence',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: smallHeadingTextStyle,
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
@@ -233,7 +239,10 @@ class _RegisterFIRState extends State<RegisterFIR> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Victim Type"),
+        Text(
+          "Victim Type",
+          style: smallHeadingTextStyle,
+        ),
         Obx(
           () => Row(
             children: options.map((String option) {
@@ -322,20 +331,26 @@ class _RegisterFIRState extends State<RegisterFIR> {
 
   Widget _buildDateTimePicker() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 2),
       child: Row(
         children: [
-          const Text('Incident Date'),
+          Text('Incident Date', style: smallHeadingTextStyle),
           const Spacer(),
-          InkWell(
+          Material(
+            child: InkWell(
               onTap: () => _selectDateAndTime(context),
-              child: Obx(
-                () => Text(
-                  DateFormat('MMMM d, y - hh:mm a')
-                      .format(controller.date.value),
-                  style: const TextStyle(color: Colors.blue),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Obx(
+                  () => Text(
+                    DateFormat('MMMM d, y - hh:mm a')
+                        .format(controller.date.value),
+                    style: const TextStyle(color: Colors.blue),
+                  ),
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -464,7 +479,7 @@ class _RegisterFIRState extends State<RegisterFIR> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10)),
                             child: Text(
-                              'Cancle',
+                              'Cancel',
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium!

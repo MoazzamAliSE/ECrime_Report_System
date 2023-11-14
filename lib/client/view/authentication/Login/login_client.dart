@@ -12,7 +12,7 @@ class _LoginPageClientState extends State<LoginPageClient> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Login User'),
         centerTitle: true,
       ),
       body: BackgroundFrame(

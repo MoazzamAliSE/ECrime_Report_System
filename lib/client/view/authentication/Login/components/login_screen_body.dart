@@ -23,9 +23,18 @@ class LoginScreenClientBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'User Login',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              const Row(
+                children: [
+                  Text(
+                    'Welcome Back To ',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 150,
+                    width: 150,
+                    child: ImageLogoAuth(),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               LoginEmailField(),
