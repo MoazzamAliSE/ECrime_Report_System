@@ -1,17 +1,19 @@
+import 'package:ecrime/client/view%20model/controller/complain_controller/complain_controller.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class ComplaintPage extends StatefulWidget {
-  const ComplaintPage({super.key});
-
+class ComplainPage extends StatefulWidget {
+  const ComplainPage({super.key, required this.complainType});
+  final String complainType;
   @override
-  _ComplaintPageState createState() => _ComplaintPageState();
+  _ComplainPageState createState() => _ComplainPageState();
 }
 
-class _ComplaintPageState extends State<ComplaintPage> {
-  String selectedInstitute = 'Police'; 
-  String selectedProvince = 'Punjab'; 
+class _ComplainPageState extends State<ComplainPage> {
+  String selectedInstitute = 'Police';
+  String selectedProvince = 'Punjab';
   List<String> pakistanProvinces = [
     'Punjab',
     'Sindh',
@@ -20,77 +22,118 @@ class _ComplaintPageState extends State<ComplaintPage> {
     'Gilgit-Baltistan',
     'Azad Jammu and Kashmir'
   ];
-
   List<String> institutesList = ['Police', 'Education', 'Other'];
+  final controller = Get.put(ComplainController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Complaint for Corruption'),
+        title: Text(widget.complainType == complainService
+            ? 'Complaint for Service'
+            : 'Complaint for Corruption'),
       ),
       body: BackgroundFrame(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Report Corruption',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.complainType == complainService
+                      ? 'Report Service'
+                      : 'Report Corruption',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Submit your complaint below:',
-                style: TextStyle(
-                  fontSize: 16,
+                const SizedBox(height: 10),
+                const Text(
+                  'Submit your complaint below:',
+                  style: TextStyle(
+                    fontSize: 18, // You can adjust the size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text('Select Institute:'),
-              const SizedBox(height: 10),
-              _buildDropdown(
-                'Select Institute',
-                institutesList,
-                (value) => selectedInstitute = value!,
-              ),
-              const SizedBox(height: 20),
-              const Text('Region'),
-              const SizedBox(height: 10),
-              _buildDropdown(
-                'Region',
-                pakistanProvinces,
-                (value) => selectedInstitute = value!,
-              ),
-              const SizedBox(height: 10),
-              const Text('Enter Details:'),
-              const SizedBox(height: 10),
-              GenericTextField(
-                hintText: 'Enter details about corruption...',
-                maxLines: 4,
-                minLines: 4,
-                controller: null,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  
-                  print('Upload Document/Picture/Video');
-                },
-                child: const Text('Upload Document/Picture/Video'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  
-                  print('Complaint Submitted!');
-                },
-                child: const Text('Submit Complaint'),
-              ),
-            ],
+                const SizedBox(height: 20),
+                const Text(
+                  'Select Institute:',
+                  style: TextStyle(
+                    fontSize: 18, // You can adjust the size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildDropdown(
+                  'Select Institute',
+                  institutesList,
+                  (value) => controller.institute.value = value!,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Region',
+                  style: TextStyle(
+                    fontSize: 18, // You can adjust the size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildDropdown(
+                  'Region',
+                  pakistanProvinces,
+                  (value) => controller.region.value = value!,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Enter Details:',
+                  style: TextStyle(
+                    fontSize: 18, // You can adjust the size as needed
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                GenericTextField(
+                  hintText: widget.complainType == complainService
+                      ? 'Enter details about service...'
+                      : 'Enter details about corruption...',
+                  maxLines: 4,
+                  minLines: 4,
+                  controller: controller.detail,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                    onPressed: () {
+                      controller.picEvidence();
+                    },
+                    child: Obx(() => controller.evidenceName.isEmpty
+                        ? const Text('Upload Document/Picture/Video')
+                        : Text(controller.evidenceName.value))),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: 120,
+                  height: 45,
+                  child: ElevatedButton(
+                    onPressed: controller.loading.value
+                        ? null
+                        : () =>
+                            controller.registerComplain(widget.complainType),
+                    child: Obx(() => controller.loading.value
+                        ? Center(
+                            child: SizedBox(
+                              height: 15,
+                              width: 15,
+                              child: CircularProgressIndicator(
+                                color: AppColor.primaryColor,
+                              ),
+                            ),
+                          )
+                        : const Text('Submit Complaint')),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

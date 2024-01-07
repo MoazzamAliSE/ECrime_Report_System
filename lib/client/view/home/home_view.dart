@@ -1,16 +1,28 @@
+import 'package:ecrime/client/utils/utils.dart';
+import 'package:ecrime/client/view/complain_corruption/complain_corruption.dart';
+import 'package:ecrime/client/view/home/components/investigators.dart';
+import 'package:ecrime/client/view/search%20station/search_police_station.dart';
+import 'package:ecrime/client/view/status/status_view.dart';
 import 'package:ecrime/client/view/widgets/background_frame.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
+import 'package:get/get.dart';
+
+import '../../view model/controller/home controller/home_controller.dart';
+
+//to use globally
+var complainCorruption = 'corruption';
+var complainService = 'service';
 
 class HomeScreenClient extends StatelessWidget {
-  const HomeScreenClient({super.key});
-
+  final controller = Get.put(HomeController());
+  HomeScreenClient({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
       color: AppColor.primaryColor,
       child: SafeArea(
         child: Scaffold(
-          drawer: const MyDrawer(),
+          drawer: MyDrawer(),
           appBar: _buildAppBar(),
           body: BackgroundFrame(
             child: SingleChildScrollView(
@@ -20,7 +32,14 @@ class HomeScreenClient extends StatelessWidget {
                   children: [
                     _buildHeadingText(),
                     const SizedBox(
-                      height: 66,
+                      height: 36,
+                    ),
+                    Divider(
+                      thickness: 2,
+                      color: AppColor.primaryColor,
+                    ),
+                    const SizedBox(
+                      height: 30,
                     ),
                     _buildUpperButtons(context),
                     const SizedBox(
@@ -68,23 +87,22 @@ class HomeScreenClient extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(
-                  child: CardButtonReport(
-                    svgIcon: regFir,
-                    text: 'Investigation Update',
-                    onTap: () {
-                      
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
+                // Expanded(
+
+                //   child: CardButtonReport(
+                //     svgIcon: regFir,
+                //     text: 'Investigation Update',
+                //     onTap: () {
+                //       Navigator.pop(context);
+                //     },
+                //   ),
+                // ),
                 Expanded(
                   child: CardButtonReport(
                     svgIcon: regFir,
                     text: 'Status of FIR',
                     onTap: () {
-                      
-                      Navigator.pop(context);
+                      Get.off(const StatusPage()); //test
                     },
                   ),
                 ),
@@ -93,8 +111,11 @@ class HomeScreenClient extends StatelessWidget {
                     svgIcon: regFir,
                     text: 'Investigator',
                     onTap: () {
-                      
-                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => InvestigatorsPage(),
+                          ));
                     },
                   ),
                 ),
@@ -122,16 +143,16 @@ class HomeScreenClient extends StatelessWidget {
                   svgIcon: regFir,
                   text: 'Complain for Curruption',
                   onTap: () {
-                    
-                    Navigator.pop(context);
+                    Get.off(ComplainPage(complainType: complainCorruption));
+
+                    // Navigator.pop(context);
                   },
                 ),
                 CardButtonReport(
                   svgIcon: regFir,
                   text: 'Complain for Services',
                   onTap: () {
-                    
-                    Navigator.pop(context);
+                    Get.off(ComplainPage(complainType: complainService));
                   },
                 ),
               ],
@@ -146,32 +167,36 @@ class HomeScreenClient extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        CardButtonReportWhite(
-          svgIcon: policeStation,
-          text: "Find Police Station",
-          onTap: () {
-            showNoImplementationDialog(context);
-            print("abc");
-          },
-        ),
-        CardButtonReportWhite(
-          svgIcon: generatePdf,
-          text: "Generate Report",
-          onTap: () {
-            showNoImplementationDialog(context);
+        Expanded(
+          child: CardButtonReportWhite(
+            svgIcon: policeStation,
+            text: "Find Police Station",
+            onTap: () {
+              // Utils.showSnackBar('Warnind', 'Not Implement yet',
+              //     const Icon((Icons.warning_amber)));
 
-            print("abc");
-          },
-        ),
-        CardButtonReportWhite(
-          svgIcon: progress,
-          text: "Progress",
-          onTap: () {
-            showNoImplementationDialog(context);
+              Get.to(SearchPoliceStation());
 
-            print("abc");
-          },
+            },
+          ),
         ),
+        Expanded(
+          child: CardButtonReportWhite(
+            svgIcon: generatePdf,
+            text: "Women Help",
+            onTap: () {
+              Get.to(WomenHelpPage());
+            },
+          ),
+        ),
+        // CardButtonReportWhite(
+        //   svgIcon: progress,
+        //   text: "Progress",
+        //   onTap: () {
+        //     Utils.showSnackBar('Warnind', 'Not Implement yet',
+        //         const Icon((Icons.warning_amber)));
+        //   },
+        // ),
       ],
     );
   }

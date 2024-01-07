@@ -49,6 +49,7 @@ class CardButtonReport extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   text,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,

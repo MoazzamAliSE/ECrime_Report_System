@@ -19,7 +19,9 @@ class BackgroundFrame extends StatelessWidget {
               height: double.infinity,
               width: double.infinity,
               decoration: foregrounBoxDecoration,
-              child: child,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(40),topLeft: Radius.circular(40)),
+                  child: child),
             ),
           )
         ],

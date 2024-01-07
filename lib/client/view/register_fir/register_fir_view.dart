@@ -1,21 +1,7 @@
+import 'package:ecrime/client/view%20model/controller/register%20fir/register_fir_controller.dart';
 import 'package:ecrime/client/view/widgets/widgets_barrel.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-class FIRModel {
-  String victimType = '';
-  String firType = '';
-  String name = '';
-  String fathersName = '';
-  String cnic = '';
-  String phoneNumber = '';
-  String address = '';
-  String incidentDistrict = '';
-  String incidentAddress = '';
-  DateTime incidentDateTime = DateTime.now();
-  String nearestPoliceStation = '';
-  String incidentSubject = '';
-  String incidentDetails = '';
-}
 
 class RegisterFIR extends StatefulWidget {
   const RegisterFIR({Key? key}) : super(key: key);
@@ -25,13 +11,13 @@ class RegisterFIR extends StatefulWidget {
 }
 
 class _RegisterFIRState extends State<RegisterFIR> {
+  final controller = Get.put(RegisterFirController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _step1Key = GlobalKey<FormState>();
   final GlobalKey<FormState> _step2Key = GlobalKey<FormState>();
   final GlobalKey<FormState> _step3Key = GlobalKey<FormState>();
   final GlobalKey<FormState> _step4Key = GlobalKey<FormState>();
 
-  final FIRModel firModel = FIRModel();
   String simpleSpace = '';
   int currentStep = 0;
   List<String> policeStationList = [
@@ -62,7 +48,6 @@ class _RegisterFIRState extends State<RegisterFIR> {
     'Muzaffarabad (AJK)',
   ];
   late List<Step> steps;
-
   @override
   void initState() {
     super.initState();
@@ -77,13 +62,17 @@ class _RegisterFIRState extends State<RegisterFIR> {
           key: _step1Key,
           child: Column(
             children: [
-              const Text('Victim Details'),
+              Text(
+                'Victim Details',
+                style: smallHeadingTextStyle,
+              ),
               _buildRadioButtons(
                 ['Myself', 'Someone Else', 'Both'],
                 (value) {
-                  setState(() {
-                    firModel.victimType = value!;
-                  });
+                  controller.model.value.victimType = value;
+                  // setState(() {
+                  //   firModel.victimType = value!;
+                  // });
                 },
               ),
               _buildDropdown('FIR Type', [
@@ -91,33 +80,33 @@ class _RegisterFIRState extends State<RegisterFIR> {
                 'Accident FIR',
                 'Domestic Violence FIR'
               ], (value) {
-                setState(() {
-                  firModel.firType = value!;
-                });
+                controller.model.value.firType = value!;
               }),
               _buildTextFormField(
                   'Name',
-                  (value) => firModel.name = value ?? '',
+                  (value) => controller.model.value.name = value ?? '',
                   _step1Key,
                   (value) => _validateField(value, 'Name')),
               _buildTextFormField(
                   'Father\'s Name',
-                  (value) => firModel.fathersName = value ?? '',
+                  (value) => controller.model.value.fathersName = value ?? '',
                   _step1Key,
                   (value) => _validateField(value, 'Father\'s Name')),
               _buildTextFormField(
                   'CNIC',
-                  (value) => firModel.cnic = value ?? '',
+                  (value) => controller.model.value.cnic = value ?? '',
                   _step1Key,
-                  (value) => _validateField(value, 'CNIC')),
+                  (value) => _validateField(value, 'CNIC'),
+                  keyboardType: TextInputType.number),
               _buildTextFormField(
                   'Phone Number',
-                  (value) => firModel.phoneNumber = value ?? '',
+                  (value) => controller.model.value.phoneNumber = value ?? '',
                   _step1Key,
-                  (value) => _validateField(value, 'Phone Number')),
+                  (value) => _validateField(value, 'Phone Number'),
+                  keyboardType: TextInputType.number),
               _buildTextFormField(
                   'Address',
-                  (value) => firModel.address = value ?? '',
+                  (value) => controller.model.value.address = value ?? '',
                   _step1Key,
                   (value) => _validateField(value, 'Address')),
             ],
@@ -132,22 +121,29 @@ class _RegisterFIRState extends State<RegisterFIR> {
           key: _step2Key,
           child: Column(
             children: [
-              const Text('Incident Location'),
+              Text('Incident Location', style: smallHeadingTextStyle),
+              const SizedBox(
+                height: 10,
+              ),
               _buildDropdown(
                 'Incident District',
                 districtList,
-                (value) => firModel.incidentDistrict = value!,
+                (value) => controller.model.value.incidentDistrict = value!,
               ),
               _buildTextFormField(
                   'Incident Address ',
-                  (value) => firModel.incidentAddress = value ?? '',
+                  (value) =>
+                      controller.model.value.incidentAddress = value ?? '',
                   _step2Key,
                   (value) => _validateField(value, 'Incident Address')),
               _buildDateTimePicker(),
-              _buildDropdown(
-                'Nearest Police Station',
-                policeStationList,
-                (value) => firModel.nearestPoliceStation = value!,
+              Obx(
+                () => _buildDropdown(
+                  'Nearest Police Station',
+                  controller.stationList,
+                  (value) =>
+                      controller.model.value.nearestPoliceStation = value!,
+                ),
               ),
             ],
           ),
@@ -161,15 +157,16 @@ class _RegisterFIRState extends State<RegisterFIR> {
           key: _step3Key,
           child: Column(
             children: [
-              const Text('Incident Details'),
+              Text('Incident Details', style: smallHeadingTextStyle),
               _buildTextFormField(
                   'Incident Subject',
-                  (value) => firModel.incidentSubject = value ?? '',
+                  (value) =>
+                      controller.model.value.incidentSubject = value ?? '',
                   _step3Key,
                   (value) => _validateField(value, 'Incident Subject')),
               _buildTextFormField(
                 'Incident Details',
-                (value) => firModel.incidentDetails = value ?? '',
+                (value) => controller.model.value.incidentDetails = value ?? '',
                 _step3Key,
                 (value) => _validateField(value, 'Incident Details'),
                 minLines: 5,
@@ -189,27 +186,35 @@ class _RegisterFIRState extends State<RegisterFIR> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Evidence',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: smallHeadingTextStyle,
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    print('Upload Videos or Pictures');
-                  },
-                  child: const Text('Upload Videos/Pictures'),
-                ),
+                    onPressed: () {
+                      controller.picEvidenceImageVideo();
+                    },
+                    child: Obx(
+                      () => controller.evidenceType.value == 'media'
+                          ? Text(controller.fileName.value,
+                              overflow: TextOverflow.ellipsis)
+                          : const Text('Upload Videos/Pictures'),
+                    )),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    print('Upload Documents');
-                  },
-                  child: const Text('Upload Documents'),
-                ),
+                    onPressed: () {
+                      // print('Upload Documents');
+                      controller.picEvidenceDoc();
+                    },
+                    child: Obx(
+                      () => controller.evidenceType.value == 'doc'
+                          ? Text(
+                              controller.fileName.value,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          : const Text('Upload Documents'),
+                    )),
               ],
             ),
           ),
@@ -234,21 +239,28 @@ class _RegisterFIRState extends State<RegisterFIR> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Victim Type"),
-        Row(
-          children: options.map((String option) {
-            return Row(
-              children: [
-                Radio<String>(
-                  value: option,
-                  groupValue: firModel.victimType,
-                  onChanged: (value) => onChanged(value),
-                ),
-                Text(option),
-              ],
-            );
-          }).toList(),
+        Text(
+          "Victim Type",
+          style: smallHeadingTextStyle,
         ),
+        Obx(
+          () => Row(
+            children: options.map((String option) {
+              return Row(
+                children: [
+                  Radio<String>(
+                    value: option,
+                    groupValue: controller.fireType.value,
+                    onChanged: (value) {
+                      controller.fireType.value = value!;
+                    },
+                  ),
+                  Text(option),
+                ],
+              );
+            }).toList(),
+          ),
+        )
       ],
     );
   }
@@ -294,12 +306,16 @@ class _RegisterFIRState extends State<RegisterFIR> {
 
   Widget _buildTextFormField(String labelText, void Function(String?)? onSaved,
       GlobalKey<FormState> key, String? Function(dynamic value) param2,
-      {TextEditingController? controller, int? minLines, int? maxLines}) {
+      {TextEditingController? controller,
+      int? minLines,
+      int? maxLines,
+      TextInputType? keyboardType}) {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       child: GenericTextField(
         controller: controller,
         labelText: labelText,
+        keyboardType: keyboardType ?? TextInputType.text,
         onSaved: onSaved,
         minLines: minLines,
         maxLines: maxLines,
@@ -314,20 +330,25 @@ class _RegisterFIRState extends State<RegisterFIR> {
   }
 
   Widget _buildDateTimePicker() {
-    String formattedDateTime =
-        DateFormat('MMMM d, y - hh:mm a').format(firModel.incidentDateTime);
-
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 2),
       child: Row(
         children: [
-          const Text('Incident Date and Time:'),
-          const SizedBox(width: 8.0),
-          InkWell(
-            onTap: () => _selectDateAndTime(context),
-            child: Text(
-              formattedDateTime,
-              style: const TextStyle(color: Colors.blue),
+          Text('Incident Date', style: smallHeadingTextStyle),
+          const Spacer(),
+          Material(
+            child: InkWell(
+              onTap: () => _selectDateAndTime(context),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Obx(
+                  () => Text(
+                    DateFormat('MMMM d, y - hh:mm a')
+                        .format(controller.date.value),
+                    style: const TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -338,7 +359,7 @@ class _RegisterFIRState extends State<RegisterFIR> {
   Future<void> _selectDateAndTime(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: firModel.incidentDateTime,
+      initialDate: controller.model.value.incidentDateTime,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
@@ -346,7 +367,8 @@ class _RegisterFIRState extends State<RegisterFIR> {
     if (pickedDate != null) {
       TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.fromDateTime(firModel.incidentDateTime),
+        initialTime:
+            TimeOfDay.fromDateTime(controller.model.value.incidentDateTime),
       );
 
       if (pickedTime != null) {
@@ -357,10 +379,8 @@ class _RegisterFIRState extends State<RegisterFIR> {
           pickedTime.hour,
           pickedTime.minute,
         );
-
-        setState(() {
-          firModel.incidentDateTime = pickedDateTime;
-        });
+        controller.date.value = pickedDateTime;
+        controller.model.value.incidentDateTime = pickedDateTime;
       }
     }
   }
@@ -373,48 +393,108 @@ class _RegisterFIRState extends State<RegisterFIR> {
       ),
       body: BackgroundFrame(
         child: Form(
-          key: _formKey,
-          child: Stepper(
-            type: StepperType.horizontal,
-            currentStep: currentStep,
-            onStepContinue: () {
-              GlobalKey<FormState> currentStepKey;
-              switch (currentStep) {
-                case 0:
-                  currentStepKey = _step1Key;
-                  break;
-                case 1:
-                  currentStepKey = _step2Key;
-                  break;
-                case 2:
-                  currentStepKey = _step3Key;
-                  break;
-                case 3:
-                  currentStepKey = _step4Key;
-                  break;
-                default:
-                  return;
-              }
+            key: _formKey,
+            child: Obx(
+              () => Stepper(
+                type: StepperType.horizontal,
+                currentStep: controller.stepper.value,
+                steps: steps,
+                controlsBuilder: (context, details) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: controller.loading.value
+                              ? null
+                              : () {
+                                  GlobalKey<FormState> currentStepKey;
+                                  switch (controller.stepper.value) {
+                                    case 0:
+                                      currentStepKey = _step1Key;
+                                      break;
+                                    case 1:
+                                      currentStepKey = _step2Key;
+                                      break;
+                                    case 2:
+                                      currentStepKey = _step3Key;
+                                      break;
+                                    case 3:
+                                      currentStepKey = _step4Key;
+                                      break;
+                                    default:
+                                      return;
+                                  }
 
-              if (currentStepKey.currentState!.validate()) {
-                if (currentStep < steps.length - 1) {
-                  setState(() {
-                    currentStep += 1;
-                    print(currentStep);
-                  });
-                }
-              }
-            },
-            onStepCancel: () {
-              if (currentStep > 0) {
-                setState(() {
-                  currentStep -= 1;
-                });
-              }
-            },
-            steps: steps,
-          ),
-        ),
+                                  if (currentStepKey.currentState!.validate()) {
+                                    if (controller.stepper.value <
+                                        steps.length - 1) {
+                                      controller.stepper.value += 1;
+                                    } else {
+                                      controller.registerFir();
+                                    }
+                                  }
+                                },
+                          child: Container(
+                              height: 50,
+                              width: 110,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: AppColor.primaryColor,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Obx(
+                                () => controller.loading.value
+                                    ? Center(
+                                        child: SizedBox(
+                                          height: 15,
+                                          width: 15,
+                                          child: CircularProgressIndicator(
+                                            color: AppColor.whiteColor,
+                                          ),
+                                        ),
+                                      )
+                                    : Text(
+                                        controller.stepper < 3
+                                            ? 'Continue'
+                                            : 'Submit',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge!
+                                            .copyWith(color: Colors.white),
+                                      ),
+                              )),
+                        ),
+                        GestureDetector(
+                          onTap: controller.loading.value
+                              ? null
+                              : () {
+                                  if (controller.stepper.value > 0) {
+                                    controller.stepper.value -= 1;
+                                  }
+                                },
+                          child: Container(
+                            height: 50,
+                            width: 110,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              'Cancel',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                    color: Colors.grey,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )),
       ),
     );
   }
